@@ -14,7 +14,6 @@ services:
 #  # API Gateway service
 #  gateway:
 #    networks:
-#      - fams
 #    build:
 #      context: .
 #      dockerfile: ./Backend/APIGateway/Dockerfile
@@ -22,13 +21,13 @@ services:
 #      - 5000:8000
 
 
-
-
-  axonserver-1:
+  axonserver:
     image: axoniq/axonserver
-    hostname: axonserver-1
-    environment:
-      - AXONIQ_LICENSE=/axonserver/config/axoniq.license
+    hostname: axonserver
+    volumes:
+      - axonserver-data:/data
+      - axonserver-events:/eventdata
+      - axonserver-config:/config:ro
     ports:
       - '8024:8024'
       - '8124:8124'
@@ -48,8 +47,9 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - axonserver-1
+      - axonserver
       - discovery-svc
+
 
 
   # user service
@@ -63,8 +63,10 @@ services:
     ports:
       - 8081:8080
     depends_on:
-      - axonserver-1
+      - axonserver
       - discovery-svc
+
+
 
   # user service
   email-svc:
@@ -77,7 +79,7 @@ services:
     ports:
       - 8082:8080
     depends_on:
-      - axonserver-1
+      - axonserver
       - discovery-svc
 
 
@@ -93,7 +95,6 @@ services:
 #      - xpack.security.enabled=false
 #      - discovery.type=single-node
 #    networks:
-#      - fams
 
 #  kibana:
 #    container_name: kibana1
@@ -105,27 +106,25 @@ services:
 #      - elasticsearch
 
 
-
-
-#volumes:
-#  axonserver-data1:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${PWD}/data1
-#      o: bind
-#  axonserver-events1:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${PWD}/events1
-#      o: bind
-#  axonserver-log1:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${PWD}/log1
-#      o: bind
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data
+      o: bind
+  axonserver-events:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/events
+      o: bind
+  axonserver-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/config
+      o: bind
 
 
 networks:
