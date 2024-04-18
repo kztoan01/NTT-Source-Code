@@ -1,6 +1,6 @@
 services:
 
-  # RabbitMQ
+  # RabbitMQQQ
 #  rabbitmq:
 #    networks:
 #      - fams
