@@ -29,9 +29,9 @@ services:
       - axonserver-events:/eventdata
       - axonserver-config:/config:ro
     ports:
-      - 8024:8024
-      - 8124:8124
-      - 8224:8224
+      - "8024:8024"
+      - "8124:8124"
+      - "8224:8224"
     networks:
       - NTTNetwork
 
@@ -45,13 +45,11 @@ services:
       context: .
       dockerfile: DiscoveryService/Dockerfile
     ports:
-      - 8080:8080
+      - "8761:8761"
     depends_on:
       - axonserver
 
 
-
-  # user service
   user-svc:
     container_name: user-service
     networks:
@@ -60,14 +58,12 @@ services:
       context: .
       dockerfile: UserService/Dockerfile
     ports:
-      - 8081:8080
+      - "8080:8080"
     depends_on:
       - axonserver
       - discovery-svc
 
 
-
-  # user service
   email-svc:
     container_name: email-service
     networks:
@@ -76,7 +72,7 @@ services:
       context: .
       dockerfile: EmailService/Dockerfile
     ports:
-      - 8082:8080
+      - "8081:8081"
     depends_on:
       - axonserver
       - discovery-svc
