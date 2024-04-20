@@ -19,7 +19,7 @@ COPY ./UserService/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
     
 COPY ./UserService/src /workdir/server/src
-RUN mvn install
+RUN mvn clean package -DskipTests
     
 FROM builder AS dev-envs
 RUN <<EOF
@@ -43,10 +43,10 @@ RUN jar -xf ../*.jar
     
 FROM eclipse-temurin:17-jre-focal
     
-EXPOSE 8761
+EXPOSE 8080
 VOLUME /tmp
 ARG DEPENDENCY=/workdir/server/target/dependency
 COPY --from=prepare-production ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=prepare-production ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=prepare-production ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.NTT.NTTTeam.userApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.NTTT.UserService]
