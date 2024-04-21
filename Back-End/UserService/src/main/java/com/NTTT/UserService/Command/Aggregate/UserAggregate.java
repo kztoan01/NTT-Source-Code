@@ -4,21 +4,16 @@ package com.NTTT.UserService.Command.Aggregate;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.hibernate.annotations.UuidGenerator;
 import org.springframework.beans.BeanUtils;
-
 import com.NTTT.UserService.Command.Command.CreateUserCommandObject;
 import com.NTTT.UserService.Command.Command.UpdateUserCommandObject;
 import com.NTTT.UserService.Command.Event.UserCreateEventObject;
 import com.NTTT.UserService.Command.Event.UserUpdateEventObject;
-
-import java.util.UUID;
 
 @Aggregate
 public class UserAggregate {

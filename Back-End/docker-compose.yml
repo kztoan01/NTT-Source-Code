@@ -22,7 +22,7 @@ services:
 
 
   axonserver:
-    image: axoniq/axonserver
+    image: axoniq/axonserver:2024.0.0-jdk-17
     hostname: axonserver
     volumes:
       - axonserver-data:/data
@@ -119,7 +119,6 @@ volumes:
       type: none
       device: ${PWD}/config
       o: bind
-  accountDBVolumn:
 
 
 networks:
