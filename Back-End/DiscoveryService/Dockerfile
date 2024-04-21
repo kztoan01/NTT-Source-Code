@@ -23,7 +23,7 @@ COPY ./DiscoveryService/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
 
 COPY ./DiscoveryService/src /workdir/server/src
-RUN mvn install
+RUN mvn -Pprod install
 
 FROM builder AS dev-envs
 RUN <<EOF

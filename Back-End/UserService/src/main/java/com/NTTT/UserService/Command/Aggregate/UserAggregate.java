@@ -23,9 +23,6 @@ import java.util.UUID;
 @Aggregate
 public class UserAggregate {
 
-
-
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 

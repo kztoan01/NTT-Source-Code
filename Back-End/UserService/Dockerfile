@@ -19,7 +19,7 @@ COPY ./UserService/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
     
 COPY ./UserService/src /workdir/server/src
-RUN mvn clean package -DskipTests
+RUN mvn -Pprod clean package -DskipTests
     
 FROM builder AS dev-envs
 RUN <<EOF

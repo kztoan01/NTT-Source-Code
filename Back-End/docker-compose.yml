@@ -100,26 +100,31 @@ services:
 #      - elasticsearch
 
 
+#volumes:
+#  axonserver-data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/data
+#      o: bind
+#  axonserver-events:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/events
+#      o: bind
+#  axonserver-config:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/config
+#      o: bind
+#  accountDBVolumn:
+#
 volumes:
   axonserver-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/data
-      o: bind
   axonserver-events:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/events
-      o: bind
   axonserver-config:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${PWD}/config
-      o: bind
-  accountDBVolumn:
 
 
 networks:
