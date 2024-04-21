@@ -19,7 +19,7 @@ COPY ./EmailService/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
     
 COPY ./EmailService/src /workdir/server/src
-RUN mvn install
+RUN mvn clean package -DskipTests
     
 FROM builder AS dev-envs
 RUN <<EOF
