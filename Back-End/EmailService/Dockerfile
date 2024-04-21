@@ -43,7 +43,7 @@ RUN jar -xf ../*.jar
     
 FROM eclipse-temurin:17-jre-focal
     
-EXPOSE 8761
+EXPOSE 8081
 VOLUME /tmp
 ARG DEPENDENCY=/workdir/server/target/dependency
 COPY --from=prepare-production ${DEPENDENCY}/BOOT-INF/lib /app/lib
