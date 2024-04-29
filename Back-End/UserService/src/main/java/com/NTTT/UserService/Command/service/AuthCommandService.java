@@ -93,7 +93,6 @@ public class AuthCommandService {
                 responseObject.setMessage("Register successfully!");
                 responseObject.setChangeSuccessfully(true);
                 responseObject.setStatusCode(HttpStatus.CREATED.value());
-//                responseObject.setResponeUserDTO(modelMapper.map(ourUserResult, ResponeUserDTO.class));
                 }
         } catch (DataAccessException e) {
             responseObject.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -109,10 +108,10 @@ public class AuthCommandService {
         try {
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getGmail(),signinRequest.getPassword()));
-            User user = userRepository.findByEmailAddress(signinRequest.getGmail());
+            User user = userRepository.findByEmailAddress(signinRequest.getGmail()).orElseThrow();
             if(user!=null)
             {
-                System.out.println("USER IS: "+ user);
+                logger.info("USER IS:"+ user);
                 var jwt = jwtUtils.generateToken(user);
                 var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
                 response.setStatusCode(200);
@@ -137,7 +136,7 @@ public class AuthCommandService {
     public ResponseObject refreshToken(ResponseObject refreshTokenRequest){
         ResponseObject response = new ResponseObject();
         String ourUsername = jwtUtils.extractUsername(refreshTokenRequest.getToken());
-        User users = userRepository.findByUserName(ourUsername);
+        User users = userRepository.findByUserName(ourUsername).orElseThrow();
         if (jwtUtils.isTokenValid(refreshTokenRequest.getToken(), users)) {
             users.setUserName(refreshTokenRequest.getMessage());
             var jwt = jwtUtils.generateToken(users);

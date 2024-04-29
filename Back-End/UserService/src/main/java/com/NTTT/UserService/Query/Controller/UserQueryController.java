@@ -1,6 +1,7 @@
 package com.NTTT.UserService.Query.Controller;
 
 
+import com.NTTT.UserService.Command.Model.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +30,17 @@ public class UserQueryController {
            return userQueryService.getAllUser();
     }
 
-    @GetMapping("/{userId}")
-    public ResponseUserDTO getUserDetail(@PathVariable String userId) {
+    @GetMapping("/getByID/{userId}")
+    public ResponseObject getUserDetailByUserID(@PathVariable String userId) {
 
         return userQueryService.getUserDetail(userId);
+
+    }
+
+    @GetMapping("/getByName/{userName}")
+    public ResponseObject getUserDetailByUsername(@PathVariable String userName) {
+
+        return userQueryService.getUserDetailByUsername(userName);
 
     }
 }

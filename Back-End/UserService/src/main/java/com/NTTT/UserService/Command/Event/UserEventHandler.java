@@ -25,7 +25,7 @@ public class UserEventHandler {
     @EventHandler
     public void onUpdateUser(UserUpdateEventObject event)
     {
-        User user = userRepository.findByUserId(event.getUserId());
+        User user = userRepository.findByUserId(event.getUserId()).orElseThrow();
         user.setUserName(event.getUserName());
         user.setApple(event.getApple());
         user.setFacebook(event.getFacebook());

@@ -1,0 +1,10 @@
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(®ºëàýÿÿÿÿ
+i	java:S116
+"ORename this field "Type" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÿà¢ªüÿÿÿÿ
+f	java:S116"RRename this field "Message" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„Âóy
+C
+java:S1068
+"(Remove this unused "Type" private field.(ÿà¢ªüÿÿÿÿ
+@
+java:S1068"+Remove this unused "Message" private field.(„Âóy

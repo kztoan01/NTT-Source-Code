@@ -5,16 +5,17 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.NTTT.UserService.Command.Data.User;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-  User findByUserName(String username);
+  Optional<User> findByUserName(String username);
 
 
-  User findByEmailAddress(String emailAddress);
+  Optional<User> findByEmailAddress(String emailAddress);
 
-  User findByUserId(String userId);
+  Optional<User> findByUserId(String userId);
 
 
   @Query("select count(p) = 1 from User p where userName = ?1")

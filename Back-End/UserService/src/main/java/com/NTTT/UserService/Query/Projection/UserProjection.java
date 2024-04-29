@@ -1,6 +1,7 @@
 package com.NTTT.UserService.Query.Projection;
 
 
+import com.NTTT.UserService.Command.Model.ResponseObject;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,27 @@ public class UserProjection {
     private UserRepository UserRepository;
 
     @QueryHandler
-    public ResponseUserDTO handle(GetUserQuery getUsersQuery) {
-        ResponseUserDTO model = new ResponseUserDTO();
-        User user = UserRepository.findByUserId(getUsersQuery.getUserId());
-        BeanUtils.copyProperties(user, model);
+    public ResponseObject handle(GetUserQuery getUsersQuery) {
 
-        return model;
+
+        ResponseObject responseObject = new ResponseObject();
+        ResponseUserDTO model = new ResponseUserDTO();
+        try
+        {
+            User user = UserRepository.findByUserId(getUsersQuery.getUserId()).orElseThrow();
+            BeanUtils.copyProperties(user, model);
+            responseObject.setStatusCode(200);
+            responseObject.setResponseUserDTO(model);
+            responseObject.setChangeSuccessfully(false);
+        }
+        catch (Exception e)
+        {
+            responseObject.setStatusCode(404);
+            responseObject.setMessage("UserId not found!");
+            responseObject.setChangeSuccessfully(false);
+        }
+
+        return  responseObject;
     }
     @QueryHandler
     List<ResponseUserDTO> handle(GetAllUsersQuery getAllUsersQuery){

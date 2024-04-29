@@ -1,5 +1,7 @@
 package com.NTTT.UserService.Query.Service;
 
+import com.NTTT.UserService.Command.Data.UserRepository;
+import com.NTTT.UserService.Command.Model.ResponseObject;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class UserQueryService {
     @Autowired
     private QueryGateway queryGateway;
 
+    @Autowired
+    UserRepository userRepository;
+
     public List<ResponseUserDTO> getAllUser(){
         GetAllUsersQuery getAllUsersQuery = new GetAllUsersQuery();
         List<ResponseUserDTO> list = queryGateway.query(getAllUsersQuery, ResponseTypes.multipleInstancesOf(ResponseUserDTO.class))
@@ -27,15 +32,43 @@ public class UserQueryService {
         return list;
     }
     
-    public ResponseUserDTO getUserDetail(String UserId) {
+    public ResponseObject getUserDetail(String UserId) {
         GetUserQuery getUsersQuery = new GetUserQuery();
         getUsersQuery.setUserId(UserId);
+        ResponseObject responseObject = new ResponseObject();
+            userRepository.findByUserId(UserId);
+            ResponseObject UserResponseObject =
+                    queryGateway.query(getUsersQuery,
+                                    ResponseTypes.instanceOf(ResponseObject.class))
+                            .join();
+            responseObject = UserResponseObject;
+            responseObject.setChangeSuccessfully(false);
 
-        ResponseUserDTO UserResponseModel =
-                queryGateway.query(getUsersQuery,
-                                ResponseTypes.instanceOf(ResponseUserDTO.class))
-                        .join();
 
-        return UserResponseModel;
+        return responseObject;
+    }
+
+    public ResponseObject getUserDetailByUsername(String username) {
+        GetUserQuery getUsersQuery = new GetUserQuery();
+
+        ResponseObject responseObject = new ResponseObject();
+        try
+        {
+            getUsersQuery.setUserId(userRepository.findByUserName(username).orElseThrow().getUserId());
+            ResponseUserDTO UserResponseModel =
+                    queryGateway.query(getUsersQuery,
+                                    ResponseTypes.instanceOf(ResponseUserDTO.class))
+                            .join();
+            responseObject.setStatusCode(200);
+            responseObject.setResponseUserDTO(UserResponseModel);
+            responseObject.setChangeSuccessfully(false);
+        }
+        catch (Exception e)
+        {
+            responseObject.setStatusCode(404);
+            responseObject.setMessage("Username not found!");
+            responseObject.setChangeSuccessfully(false);
+        }
+        return responseObject;
     }
 }

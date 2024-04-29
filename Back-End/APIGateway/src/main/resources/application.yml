@@ -1,0 +1,38 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: api-gateway
+  datasource:
+    username: sa
+    password: 12345
+    url: jdbc:sqlserver://localhost:1433;TrustServerCertificate=true;database=user
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect : org.hibernate.dialect.SQLServer2019Dialect
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  cloud:
+    gateway:
+      routes:
+        - id: bookservice
+          uri: http://localhost:8080
+          predicates:
+            - Path=/auth/**
+        - id: userservice
+          uri: http://localhost:8080
+          predicates:
+            - Path=/user/**
+          filters:
+            - AuthenticationFilter
+        - id: usersservice
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - AuthenticationFilter
+
+

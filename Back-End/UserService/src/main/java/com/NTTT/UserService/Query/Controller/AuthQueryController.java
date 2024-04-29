@@ -23,6 +23,7 @@ public class AuthQueryController {
     @Autowired
     private AuthCommandService authCommandService;
 
+
     @Autowired
     private AuthQueryService authQueryService;
 

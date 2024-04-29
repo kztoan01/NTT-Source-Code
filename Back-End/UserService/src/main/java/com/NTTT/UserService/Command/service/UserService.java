@@ -55,7 +55,10 @@ public class UserService {
     Logger logger
             = LoggerFactory.getLogger(AuthCommandController.class);
 
+    Random rand = new Random();
 
+
+    @Autowired
     private EmailClient emailClient;
 
     public static boolean patternMatches(String emailAddress, String regexPattern) {
@@ -64,14 +67,16 @@ public class UserService {
                 .matches();
     }
 
-
+    /**
+     * This method is used to change the password of user.
+     */
     public ResponseObject changeUserPassword(changePasswordRequest changePasswordRequest) {
         ResponseObject responseObject = new ResponseObject();
         try {
-            User foundUser = userRepository.findByUserId(changePasswordRequest.getUserId());
+            User foundUser = userRepository.findByUserId(changePasswordRequest.getUserId()).orElseThrow();
              if(foundUser != null && otpRepository.findByUserId(foundUser.getId()) == null && changePasswordRequest.getOtp()==0)
             {
-                Random rand = new Random();
+                logger.info("flag1");
                 int otp = 100000 + rand.nextInt(900000);
                 otpService.AddOtp(otp,"ChangePassword", foundUser.getId());
                 emailClient.sendMail("Changing password otp","Hi,We would like to send you OTP:"+otp,foundUser.getEmailAddress());
@@ -107,7 +112,7 @@ public class UserService {
     public ResponseObject changeUserInfo(changeInfoRequest changeInfoRequest,String token) {
         ResponseObject responseObject = new ResponseObject();
         try {
-            User ourUser = userRepository.findByUserId(changeInfoRequest.getUserID());
+            User ourUser = userRepository.findByUserId(changeInfoRequest.getUserID()).orElseThrow();
             boolean isExisted = false;
             List<ErrorDTO> errors = new ArrayList<>();
             if(userRepository.existUserByPhoneNumber(changeInfoRequest.getPhoneNumber()) && !Objects.equals(changeInfoRequest.getPhoneNumber(), ourUser.getPhoneNumber())) {
@@ -141,7 +146,7 @@ public class UserService {
             }
             else
             {
-                User foundUser = userRepository.findByUserId(changeInfoRequest.getUserID());
+                User foundUser = userRepository.findByUserId(changeInfoRequest.getUserID()).orElseThrow();
                 if (foundUser != null) {
                     ResponseObject responseObject1 = new ResponseObject();
                     responseObject1.setToken(token.substring(7));
