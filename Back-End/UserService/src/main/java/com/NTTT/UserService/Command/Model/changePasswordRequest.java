@@ -11,7 +11,6 @@ public class changePasswordRequest {
 
     private String userId;
 
-
     private int otp;
 
 }

@@ -3,12 +3,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.NTTT.UserService.Command.Data.OtpRepository;
+import com.NTTT.UserService.Command.Data.OtpEntityRepository;
 import com.NTTT.UserService.Command.Model.ResponseObject;
 import com.NTTT.UserService.Command.Model.changeInfoRequest;
 import com.NTTT.UserService.Command.Model.changePasswordRequest;
-import com.NTTT.UserService.Command.service.OtpService;
-import com.NTTT.UserService.Command.service.UserService;
+import com.NTTT.UserService.Command.Service.OtpService;
+import com.NTTT.UserService.Command.Service.UserService;
 import com.NTTT.UserService.clients.EmailClient;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class UserCommandController {
     OtpService otpService;
 
     @Autowired
-    OtpRepository otpRepository;
+    OtpEntityRepository otpEntityRepository;
 
     @PostMapping("/changeInfo")
     public ResponseObject changeInfo(@RequestBody @Valid changeInfoRequest changeInfoRequest,@RequestHeader(name="Authorization") String token){

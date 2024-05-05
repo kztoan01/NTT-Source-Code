@@ -1,8 +1,8 @@
-package com.NTTT.UserService.Command.service;
+package com.NTTT.UserService.Command.Service;
 
+import com.NTTT.UserService.Command.Data.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -25,7 +25,7 @@ public class JWTUtils {
         this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(User userDetails){
         Map<String, Object> claims = new HashMap<>();
         claims.put("UserRole", userDetails.getAuthorities());
         return Jwts.builder()
@@ -36,10 +36,10 @@ public class JWTUtils {
                 .signWith(Key)
                 .compact();
     }
-    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
+    public String generateRefreshToken(HashMap<String, Object> claims, User user){
         return Jwts.builder()
                 .claims(claims)
-                .subject(userDetails.getUsername())
+                .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(Key)
@@ -53,7 +53,7 @@ public class JWTUtils {
         return claimsTFunction.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, User userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

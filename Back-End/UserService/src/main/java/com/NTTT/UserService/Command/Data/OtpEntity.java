@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "OptTable")
-public class Otp {
+@Table(name = "OtpTable")
+public class OtpEntity {
 
 
     @Id
@@ -21,8 +21,8 @@ public class Otp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "userId",nullable = false)
-    private int userId;
+    @Column(name = "userEmail",nullable = false)
+    private String userEmail;
 
     @Column(name = "otpType",nullable = false)
     private String otpType;

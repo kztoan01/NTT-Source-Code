@@ -43,4 +43,11 @@ public class UserQueryController {
         return userQueryService.getUserDetailByUsername(userName);
 
     }
+
+    @GetMapping("/getByEmail/{userEmail}")
+    public ResponseObject getUserDetailByUserEmail(@PathVariable String userEmail) {
+
+        return userQueryService.getUserDetailByUserEmail(userEmail);
+
+    }
 }

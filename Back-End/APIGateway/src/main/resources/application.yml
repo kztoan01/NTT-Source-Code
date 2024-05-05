@@ -1,38 +1,35 @@
 server:
   port: 9000
 
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://discovery-service:8761/eureka
+#
+
+#axon:
+#  axonserver:
+#    servers: ${AXONSERVER_HOST:axonserver}
+
 spring:
   application:
-    name: api-gateway
-  datasource:
-    username: sa
-    password: 12345
-    url: jdbc:sqlserver://localhost:1433;TrustServerCertificate=true;database=user
-  jpa:
-    show-sql: true
-    hibernate:
-      dialect : org.hibernate.dialect.SQLServer2019Dialect
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    name: ApiGateway
   cloud:
     gateway:
       routes:
-        - id: bookservice
-          uri: http://localhost:8080
+        - id: userservice
+          uri: lb://userservice
           predicates:
             - Path=/auth/**
         - id: userservice
-          uri: http://localhost:8080
+          uri: lb://userservice
           predicates:
             - Path=/user/**
           filters:
             - AuthenticationFilter
         - id: usersservice
-          uri: http://localhost:8080
+          uri: lb://usersservice
           predicates:
             - Path=/api/users/**
           filters:
             - AuthenticationFilter
-
-

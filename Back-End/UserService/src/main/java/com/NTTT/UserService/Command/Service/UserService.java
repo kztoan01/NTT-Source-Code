@@ -1,4 +1,4 @@
-package com.NTTT.UserService.Command.service;
+package com.NTTT.UserService.Command.Service;
 
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.NTTT.UserService.Command.Command.UpdateUserCommandObject;
 import com.NTTT.UserService.Command.Controller.AuthCommandController;
-import com.NTTT.UserService.Command.Data.OtpRepository;
+import com.NTTT.UserService.Command.Data.OtpEntityRepository;
 import com.NTTT.UserService.Command.Data.User;
 import com.NTTT.UserService.Command.Data.UserRepository;
 import com.NTTT.UserService.Command.Model.ErrorDTO;
@@ -44,7 +44,7 @@ public class UserService {
     AuthQueryService authQueryService;
 
     @Autowired
-    OtpRepository otpRepository;
+    OtpEntityRepository otpEntityRepository;
 
     @Autowired
     OtpService otpService;
@@ -74,22 +74,22 @@ public class UserService {
         ResponseObject responseObject = new ResponseObject();
         try {
             User foundUser = userRepository.findByUserId(changePasswordRequest.getUserId()).orElseThrow();
-             if(foundUser != null && otpRepository.findByUserId(foundUser.getId()) == null && changePasswordRequest.getOtp()==0)
+             if(foundUser != null && otpEntityRepository.findByUserEmail(foundUser.getEmailAddress()) == null && changePasswordRequest.getOtp()==0)
             {
                 logger.info("flag1");
                 int otp = 100000 + rand.nextInt(900000);
-                otpService.AddOtp(otp,"ChangePassword", foundUser.getId());
+                otpService.AddOtp(otp,"ChangePassword", foundUser.getEmailAddress());
                 emailClient.sendMail("Changing password otp","Hi,We would like to send you OTP:"+otp,foundUser.getEmailAddress());
                 responseObject.setMessage("Send email successfully!");
                 responseObject.setChangeSuccessfully(false);
             }
-            else if (otpRepository.findByUserId(foundUser.getId()) != null && changePasswordRequest.getOtp() != 0)
+            else if (otpEntityRepository.findByUserEmail(foundUser.getEmailAddress()) != null && changePasswordRequest.getOtp() != 0)
             {
-                    if(changePasswordRequest.getOtp() == otpRepository.findByUserId(foundUser.getId()).getOtp())
+                    if(changePasswordRequest.getOtp() == otpEntityRepository.findByUserEmail(foundUser.getEmailAddress()).getOtp())
                     {
                         foundUser.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
                         userRepository.save(foundUser);
-                        otpRepository.delete(otpRepository.findByUserId(foundUser.getId()));
+                        otpEntityRepository.delete(otpEntityRepository.findByUserEmail(foundUser.getEmailAddress()));
                         responseObject.setMessage("Change Password successfully!");
                         responseObject.setChangeSuccessfully(true);
                     }

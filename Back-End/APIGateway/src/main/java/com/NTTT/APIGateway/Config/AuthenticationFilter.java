@@ -1,5 +1,6 @@
 package com.NTTT.ApiGateway.Config;
 
+import com.NTTT.ApiGateway.Clients.ResponseObject;
 import com.NTTT.ApiGateway.Clients.ResponseUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,37 +49,48 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
                 try {
                     List<String> userRoles = jwtUtil.extractUserRoles(authHeader);
-                    logger.info(userRoles.get(0));
-                    if (userRoles.contains("ADMIN")) {
-                        return chain.filter(exchange);
-                    }
-                    else if (userRoles.contains("MANAGER")) {
-                        String requestPath = exchange.getRequest().getPath().toString();
-                        logger.info(requestPath);
-                        if (requestPath.startsWith("/api/users")) {
+                    String Email = jwtUtil.extractEmail(authHeader);
+                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/api/users/getByEmail/" + Email, ResponseObject.class);
+                    if(responseObject.getStatusCode() == 200)
+                    {
+                        if (userRoles.contains("ADMIN")) {
                             return chain.filter(exchange);
-                        } else {
+                        }
+                        else if (userRoles.contains("MANAGER")) {
+                            String requestPath = exchange.getRequest().getPath().toString();
+                            logger.info(requestPath);
+                            if (requestPath.startsWith("/api/users"))
+                            {
+                                return chain.filter(exchange);
+                            }
+                            else
+                            {
+                                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                                return exchange.getResponse().setComplete();
+                            }
+                        }
+                        else if (userRoles.contains("USER")) {
+                            String requestPath = exchange.getRequest().getPath().toString();
+                            if (requestPath.contains("/auth/") || requestPath.contains("/user/")) {
+                                return chain.filter(exchange);
+                            } else {
+                                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                                return exchange.getResponse().setComplete();
+                            }
+                        }
+                        else {
                             exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                             return exchange.getResponse().setComplete();
                         }
                     }
-                    else if (userRoles.contains("USER")) {
-                        String requestPath = exchange.getRequest().getPath().toString();
-                        if (requestPath.contains("/auth/") || requestPath.contains("/user/")) {
-                            return chain.filter(exchange);
-                        } else {
-                            exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                            return exchange.getResponse().setComplete();
-                        }
-                    }
-                    // If user has no role, deny access
-                    else {
+                    else
+                    {
+                        logger.info("Invalid access...![User not found]");
                         exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                         return exchange.getResponse().setComplete();
                     }
-
                 } catch (Exception e) {
-                    logger.info("Invalid access...!");
+                    logger.info("Invalid access...![Error while getting user info]");
                     exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                     return exchange.getResponse().setComplete();
                 }
@@ -86,8 +98,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             return chain.filter(exchange);
         });
     }
-
-
 
     public static class Config {
 

@@ -22,7 +22,7 @@ public class JWTUtils {
     }
 
 
-    public String extractUsername(String token){
+    public String extractEmail(String token){
         return extractClaims(token).getSubject();
     }
 
@@ -58,7 +58,7 @@ public class JWTUtils {
         return claims;
     };
     public boolean isTokenValid(String token, String APIuserName){
-        final String username = extractUsername(token);
+        final String username = extractEmail(token);
         return (username.equals(APIuserName) && !isTokenExpired(token));
     }
     public boolean isTokenExpired(String token){

@@ -5,25 +5,14 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.NTTT.UserService.Command.Command.CreateUserCommandObject;
 import com.NTTT.UserService.Command.Controller.AuthCommandController;
-import com.NTTT.UserService.Command.Data.User;
 import com.NTTT.UserService.Command.Data.UserRepository;
-import com.NTTT.UserService.Command.Model.*;
-import com.NTTT.UserService.Command.service.JWTUtils;
-import com.NTTT.UserService.Query.Model.ResponseUserDTO;
+import com.NTTT.UserService.Command.Service.JWTUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -39,8 +28,6 @@ public class AuthQueryService {
     @Autowired
     private CommandGateway commandGateway;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     Logger logger
             = LoggerFactory.getLogger(AuthCommandController.class);

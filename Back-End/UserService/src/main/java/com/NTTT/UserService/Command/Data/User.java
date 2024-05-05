@@ -1,5 +1,6 @@
 package com.NTTT.UserService.Command.Data;
 
+import com.NTTT.UserService.Command.Model.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -10,9 +11,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "UserTable")
-public class User implements UserDetails {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,30 +64,33 @@ public class User implements UserDetails {
     private Integer userRole;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
+
+    public Collection<UserRole> getAuthorities() {
+        List<UserRole> authorities = new ArrayList<>();
 
         switch (userRole) {
             case 1:
-                authorities.add(new SimpleGrantedAuthority("USER"));
+                authorities.add(UserRole.USER);
                 break;
             case 2:
-                authorities.add(new SimpleGrantedAuthority("MANAGER"));
+                authorities.add(UserRole.MANAGER);
                 break;
             case 3:
-                authorities.add(new SimpleGrantedAuthority("ADMIN"));
+                authorities.add(UserRole.ADMIN);
                 break;
             default:
-                authorities.add(new SimpleGrantedAuthority("USER"));
+                authorities.add(UserRole.USER);
         }
 
         return authorities;
     }
 
-
-    @Override
     public String getUsername() {
+        return emailAddress;
+    }
+
+    public String getUsername2()
+    {
         return userName;
     }
 
@@ -149,7 +150,6 @@ public class User implements UserDetails {
         return userName;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
@@ -190,22 +190,21 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
 
-    @Override
+
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
+
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @Override
+
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return true;
     }

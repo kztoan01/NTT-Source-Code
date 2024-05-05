@@ -1,4 +1,4 @@
-package com.NTTT.UserService.Command.service;
+package com.NTTT.UserService.Command.Service;
 
 
 import org.springframework.stereotype.Service;

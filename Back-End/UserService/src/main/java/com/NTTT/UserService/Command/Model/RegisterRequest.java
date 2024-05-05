@@ -18,4 +18,6 @@ public class RegisterRequest {
 
     private String gmail;
 
+    private Integer otp;
+
 }

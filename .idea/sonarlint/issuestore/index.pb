@@ -51,3 +51,7 @@ T
 $Back-End/DiscoveryService/Dockerfile,0\0\00faf081b36072b19146df6f7ffd4ebeb34c0370
 N
 Back-End/APIGateway/Dockerfile,9\e\9e3234f2965db9203cbee9efa1252881c2240be0
+ˆ
+XBack-End/UserService/src/main/java/com/NTTT/UserService/Command/Service/UserService.java,e\0\e011ffb3ff5249c498a0f9922bbd19f4a6104499
+N
+Back-End/ApiGateway/Dockerfile,4\1\4138e586fc7f8a5129fc819586e2651412a025fe

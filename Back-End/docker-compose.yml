@@ -11,14 +11,8 @@ services:
 #      - 15672:15672 # access in browser port
 #    volumes:
 #      - /var/lib/rabbitmq
-#  # API Gateway service
-#  gateway:
-#    networks:
-#    build:
-#      context: .
-#      dockerfile: ./Backend/APIGateway/Dockerfile
-#    ports:
-#      - 5000:8000
+
+
 
 
   axonserver:
@@ -47,6 +41,20 @@ services:
       - "8761:8761"
     depends_on:
       - axonserver
+
+
+  api-gateway:
+    container_name: ApiGateway
+    networks:
+      - NTTNetwork
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    ports:
+      - "9000:9000"
+    depends_on:
+      - axonserver
+      - discovery-svc
 
 
   user-svc:
