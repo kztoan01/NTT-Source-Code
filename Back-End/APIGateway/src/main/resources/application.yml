@@ -33,3 +33,9 @@ spring:
             - Path=/api/users/**
           filters:
             - AuthenticationFilter
+        - id: persionalinforservice
+          uri: lb://personalinfoservice
+          predicates:
+            - Path=/personalInfo/**
+          filters:
+            - AuthenticationFilter

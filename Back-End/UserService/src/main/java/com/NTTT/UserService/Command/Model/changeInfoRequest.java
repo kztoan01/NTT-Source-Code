@@ -21,9 +21,6 @@ public class changeInfoRequest {
     private String facebook;
 
 
-    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-    private String emailAddress;
-
     @Size(min = 10,max = 10,message = "Invalid phone number")
     private String phoneNumber;
 

@@ -32,8 +32,7 @@ public class AuthCommandController {
     @Autowired
     private AuthQueryService authQueryService;
 
-    @Autowired
-    KafkaTemplate kafkaTemplate;
+
 
     @Autowired
     MessageChannel output;
@@ -65,11 +64,6 @@ public class AuthCommandController {
     @PostMapping("/refresh")
     public ResponseObject refreshToken(@RequestBody ResponseObject refreshTokenRequest){
         return authCommandService.refreshToken(refreshTokenRequest);
-    }
-    @GetMapping("/TestNotification/{email}")
-    public String TestMessage(@PathVariable String email){
-       kafkaTemplate.send("notification",email);
-       return "Send mail successfully,check your gmail";
     }
 
 

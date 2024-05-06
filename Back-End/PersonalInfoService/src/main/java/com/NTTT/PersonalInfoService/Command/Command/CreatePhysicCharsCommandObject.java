@@ -1,35 +1,53 @@
 package com.NTTT.PersonalInfoService.Command.Command;
 
-import jakarta.persistence.Column;
+import com.NTTT.PersonalInfoService.Command.Data.ActivityLevel;
+import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class CreatePhysicCharsCommandObject {
-    @Column(name = "id")
+
+
     private Integer id;
 
-    @Column(name = "userId")
+
+
     private String userId;
 
-    @Column(name = "age")
-    private Date age;
 
-    @Column(name = "sex")
-    private Date sex;
+    @TargetAggregateIdentifier
+    private String physicCharsId;
 
-    @Column(name = "height")
+    private Integer age;
+
+    private Boolean sex;
+
     private String height;
 
-    @Column(name = "weightGoal")
     private String weightGoal;
 
-    @Column(name = "goal")
     private String goal;
 
-    @Column(name = "activityLevelId")
-    private Integer activityLevelId;
+    private ActivityLevel activityLevel;
+
+    private List<WeightTrack> weightTracks;
+
+
+    public CreatePhysicCharsCommandObject(String userId, String physicCharsId, Integer age, Boolean sex, String height, String weightGoal, String goal, ActivityLevel activityLevel, List<WeightTrack> weightTracks) {
+        this.userId = userId;
+        this.physicCharsId = physicCharsId;
+        this.age = age;
+        this.sex = sex;
+        this.height = height;
+        this.weightGoal = weightGoal;
+        this.goal = goal;
+        this.activityLevel = activityLevel;
+        this.weightTracks = weightTracks;
+    }
 }

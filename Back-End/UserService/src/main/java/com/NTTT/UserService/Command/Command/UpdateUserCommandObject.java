@@ -20,9 +20,6 @@ public class UpdateUserCommandObject {
     private String phoneNumber;
 
 
-    @Column(name = "emailAddress",unique = true)
-    private String emailAddress;
-
     @Column(name = "userName",nullable = false)
     private String userName;
 
@@ -66,13 +63,6 @@ public class UpdateUserCommandObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 
     public String getUserName() {
         return userName;
@@ -99,12 +89,11 @@ public class UpdateUserCommandObject {
     }
 
 
-    public UpdateUserCommandObject(String userId, String firstName, String lastName, String phoneNumber, String emailAddress, String userName, String facebook, String apple) {
+    public UpdateUserCommandObject(String userId, String firstName, String lastName, String phoneNumber, String userName, String facebook, String apple) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.emailAddress = emailAddress;
         this.userName = userName;
         this.facebook = facebook;
         this.apple = apple;

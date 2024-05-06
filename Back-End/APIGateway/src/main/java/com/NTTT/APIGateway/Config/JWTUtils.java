@@ -33,17 +33,15 @@ public class JWTUtils {
             Object rolesObject = claims.get("UserRole");
             if (rolesObject instanceof List) {
                 for (Object role : (List<?>) rolesObject) {
-                    if (role instanceof Map) {
-                        Object authority = ((Map<?, ?>) role).get("authority");
-                        if (authority instanceof String) {
-                            roles.add((String) authority);
-                        }
+                    if (role instanceof String) {
+                        roles.add((String) role);
                     }
                 }
             }
         }
         return roles;
     }
+
 
     private Claims extractClaims(String token) {
         Claims claims;

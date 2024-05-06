@@ -1,34 +1,33 @@
 package com.NTTT.PersonalInfoService.Command.Event;
 
+import com.NTTT.PersonalInfoService.Command.Data.ActivityLevel;
+import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
 import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class PhysicCharsUpdateEventObject  {
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "age")
-    private Date age;
+    private String physicCharsId;
 
-    @Column(name = "sex")
-    private Date sex;
+    private Integer age;
 
-    @Column(name = "height")
+    private Boolean sex;
+
     private String height;
 
-    @Column(name = "weightGoal")
     private String weightGoal;
 
-    @Column(name = "goal")
     private String goal;
 
-    @Column(name = "activityLevelId")
-    private Integer activityLevelId;
+    private ActivityLevel activityLevel;
+
+    private List<WeightTrack> weightTracks;
 
 }

@@ -29,7 +29,6 @@ public class UserEventHandler {
         user.setUserName(event.getUserName());
         user.setApple(event.getApple());
         user.setFacebook(event.getFacebook());
-        user.setEmailAddress(event.getEmailAddress());
         user.setFirstName(event.getFirstName());
         user.setLastName(event.getLastName());
         user.setPhoneNumber(event.getPhoneNumber());

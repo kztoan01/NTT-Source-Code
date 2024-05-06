@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,9 @@ public class AuthCommandService {
     OtpEntityRepository otpEntityRepository;
 
     @Autowired
+    KafkaTemplate kafkaTemplate;
+
+    @Autowired
     private ModelMapper modelMapper;
     public static boolean patternMatches(String emailAddress, String regexPattern) {
         return Pattern.compile(regexPattern)
@@ -85,7 +89,11 @@ public class AuthCommandService {
                 {
                     int otp = 100000 + rand.nextInt(900000);
                     otpService.AddOtp(otp,"VerifyEmail", registrationRequest.getGmail());
-                    emailClient.sendMail("Changing password otp","Hi,We would like to send you OTP:"+otp,registrationRequest.getGmail());
+                    EmailObject emailObject = new EmailObject();
+                    emailObject.setRecipient(registrationRequest.getGmail());
+                    emailObject.setOtp(otp);
+                    emailObject.setMessage("We would like to send you otp:");
+                    kafkaTemplate.send("notification",emailObject);
                     responseObject.setMessage("Send email successfully!");
                     responseObject.setChangeSuccessfully(false);
                 }
@@ -118,6 +126,9 @@ public class AuthCommandService {
                 {
                     foundUser.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
                     userRepository.save(foundUser);
+                    var jwt = jwtUtils.generateToken(foundUser);
+                    responseObject.setToken(jwt);
+                    responseObject.setResponseUserDTO(new ResponseUserDTO(foundUser.getUserId(),null,null,null,foundUser.getEmailAddress(),null,null,null,null,foundUser.getUserRole()));
                     responseObject.setMessage("Change Password successfully!");
                     responseObject.setChangeSuccessfully(true);
                 }
@@ -212,7 +223,10 @@ public class AuthCommandService {
         try {
             // Manually authenticate user
             User user = userRepository.findByEmailAddress(signinRequest.getGmail()).orElse(null);
-            if(user != null && user.getPassword().equals(signinRequest.getPassword())) {
+            logger.info(user.getEmailAddress());
+            logger.info(user.getPassword());
+            logger.info(passwordEncoder.encode("Phu0005l5"));
+            if(user != null && passwordEncoder.matches(signinRequest.getPassword(), user.getPassword()))  {
                 logger.info("USER IS:" + user);
                 var jwt = jwtUtils.generateToken(user);
                 var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);

@@ -14,8 +14,11 @@ import java.util.Date;
 @Entity
 @Table(name = "PremiumPlan")
 public class PremiumPlan {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Integer id;
 
     @Column(name = "userId")
     private String userId;

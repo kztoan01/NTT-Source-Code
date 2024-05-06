@@ -1,35 +1,41 @@
 package com.NTTT.PersonalInfoService.Command.Command;
 
+import com.NTTT.PersonalInfoService.Command.Data.ActivityLevel;
+import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class UpdatePhysicCharsCommandObject {
-    @Column(name = "id")
+
+
     private Integer id;
 
-    @Column(name = "userId")
+
+
     private String userId;
 
-    @Column(name = "age")
-    private Date age;
 
-    @Column(name = "sex")
-    private Date sex;
+    @TargetAggregateIdentifier
+    private String physicCharsId;
 
-    @Column(name = "height")
+    private Integer age;
+
+    private Boolean sex;
+
     private String height;
 
-    @Column(name = "weightGoal")
     private String weightGoal;
 
-    @Column(name = "goal")
     private String goal;
 
-    @Column(name = "activityLevelId")
-    private Integer activityLevelId;
+    private ActivityLevel activityLevel;
+
+    private List<WeightTrack> weightTracks;
 }

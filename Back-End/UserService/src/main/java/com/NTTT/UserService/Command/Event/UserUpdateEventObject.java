@@ -20,10 +20,6 @@ public class UserUpdateEventObject {
     @Column(name = "phoneNumber", nullable = false,unique = true)
     private String phoneNumber;
 
-
-    @Column(name = "emailAddress",unique = true)
-    private String emailAddress;
-
     @Column(name = "userName",nullable = false)
     private String userName;
 
@@ -68,13 +64,6 @@ public class UserUpdateEventObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
 
     public String getUserName() {
         return userName;

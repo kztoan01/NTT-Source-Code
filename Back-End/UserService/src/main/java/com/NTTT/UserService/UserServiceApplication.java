@@ -22,4 +22,6 @@ public class UserServiceApplication {
 		return new NewTopic("notification",2,(short) 1);
 	}
 
+
+
 }

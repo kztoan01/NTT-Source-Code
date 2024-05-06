@@ -47,16 +47,23 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
                     authHeader = authHeader.substring(7);
                 }
+                List<String> userRoles = jwtUtil.extractUserRoles(authHeader);
+                logger.info("Test13"+userRoles.get(0).toString());
                 try {
-                    List<String> userRoles = jwtUtil.extractUserRoles(authHeader);
                     String Email = jwtUtil.extractEmail(authHeader);
                     ResponseObject responseObject =  template.getForObject("http://localhost:8080/api/users/getByEmail/" + Email, ResponseObject.class);
+                    logger.info("Test:11"+responseObject.getResponseUserDTO().getEmailAddress());
+                    logger.info(String.valueOf(responseObject.getStatusCode()));
                     if(responseObject.getStatusCode() == 200)
                     {
+                        logger.info("Test:12");
+
                         if (userRoles.contains("ADMIN")) {
+                            logger.info("test Admin");
                             return chain.filter(exchange);
                         }
                         else if (userRoles.contains("MANAGER")) {
+                            logger.info("test Manager");
                             String requestPath = exchange.getRequest().getPath().toString();
                             logger.info(requestPath);
                             if (requestPath.startsWith("/api/users"))
@@ -70,8 +77,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                             }
                         }
                         else if (userRoles.contains("USER")) {
+                            logger.info("test User");
                             String requestPath = exchange.getRequest().getPath().toString();
-                            if (requestPath.contains("/auth/") || requestPath.contains("/user/")) {
+                            if (requestPath.contains("/auth/") || requestPath.contains("/user/") || requestPath.contains("/personalInfo/")) {
                                 return chain.filter(exchange);
                             } else {
                                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);

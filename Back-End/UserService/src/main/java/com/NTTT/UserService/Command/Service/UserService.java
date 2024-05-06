@@ -113,6 +113,11 @@ public class UserService {
         ResponseObject responseObject = new ResponseObject();
         try {
             User ourUser = userRepository.findByUserId(changeInfoRequest.getUserID()).orElseThrow();
+            logger.info("Test2"+ourUser.getEmailAddress());
+            logger.info(token);
+            logger.info(changeInfoRequest.getPhoneNumber());
+            logger.info(changeInfoRequest.getFacebook());
+            logger.info(changeInfoRequest.getUsername());
             boolean isExisted = false;
             List<ErrorDTO> errors = new ArrayList<>();
             if(userRepository.existUserByPhoneNumber(changeInfoRequest.getPhoneNumber()) && !Objects.equals(changeInfoRequest.getPhoneNumber(), ourUser.getPhoneNumber())) {
@@ -123,20 +128,20 @@ public class UserService {
                 errors.add(new ErrorDTO("DuplicatedUsername","User name is taken!"));
                 isExisted=true;
             }
-            if(userRepository.existUserByEmailAddress(changeInfoRequest.getEmailAddress()) && !Objects.equals(changeInfoRequest.getEmailAddress(), ourUser.getEmailAddress())) {
-                errors.add(new ErrorDTO("DuplicatedGmail","Email address is taken!"));
-                isExisted=true;
-            }
+//            if(userRepository.existUserByEmailAddress(changeInfoRequest.getEmailAddress()) && !Objects.equals(changeInfoRequest.getEmailAddress(), ourUser.getEmailAddress())) {
+//                errors.add(new ErrorDTO("DuplicatedGmail","Email address is taken!"));
+//                isExisted=true;
+//            }
             if(changeInfoRequest.getPhoneNumber().length() != 10)
             {
                 errors.add(new ErrorDTO("PhonenumberFormat","Phone number is invalid!"));
                 isExisted=true;
             }
-            if(!patternMatches(changeInfoRequest.getEmailAddress(), "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"))
-            {
-                errors.add(new ErrorDTO("GmailFormat","Gmail address is invalid!"));
-                isExisted=true;
-            }
+//            if(!patternMatches(changeInfoRequest.getEmailAddress(), "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"))
+//            {
+//                errors.add(new ErrorDTO("GmailFormat","Gmail address is invalid!"));
+//                isExisted=true;
+//            }
 
             if(isExisted)
             {
@@ -146,24 +151,16 @@ public class UserService {
             }
             else
             {
-                User foundUser = userRepository.findByUserId(changeInfoRequest.getUserID()).orElseThrow();
-                if (foundUser != null) {
-                    ResponseObject responseObject1 = new ResponseObject();
-                    responseObject1.setToken(token.substring(7));
-                    responseObject1.setMessage(changeInfoRequest.getUsername());
-                    String newToken = authCommandService.refreshToken(responseObject1).getToken();
-                    responseObject.setToken(newToken);
-                    UpdateUserCommandObject updateUserCommandObject = new UpdateUserCommandObject(changeInfoRequest.getUserID(),changeInfoRequest.getFirstName(),changeInfoRequest.getLastName(),changeInfoRequest.getPhoneNumber(),changeInfoRequest.getEmailAddress(),changeInfoRequest.getUsername(),changeInfoRequest.getFacebook(),changeInfoRequest.getApple());
+                    User foundUser = userRepository.findByUserId(changeInfoRequest.getUserID()).orElseThrow();
+                    logger.info("Test1"+foundUser.getEmailAddress());
+                    UpdateUserCommandObject updateUserCommandObject = new UpdateUserCommandObject(changeInfoRequest.getUserID(),changeInfoRequest.getFirstName(),changeInfoRequest.getLastName(),changeInfoRequest.getPhoneNumber(),changeInfoRequest.getUsername(),changeInfoRequest.getFacebook(),changeInfoRequest.getApple());
                     commandGateway.sendAndWait(updateUserCommandObject);
                     responseObject.setMessage("Change user information successfully!");
                     responseObject.setChangeSuccessfully(true);
-                } else {
-                    responseObject.setMessage("Change user information failed.User not found!");
-                    responseObject.setChangeSuccessfully(false);
-                }
             }
         } catch (Exception e) {
             System.out.println("An error occurred while changing user information: " + e.getMessage());
+            responseObject.setChangeSuccessfully(false);
         }
         return responseObject;
     }

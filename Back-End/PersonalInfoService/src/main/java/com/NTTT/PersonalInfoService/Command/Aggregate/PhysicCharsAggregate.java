@@ -4,11 +4,11 @@ package com.NTTT.PersonalInfoService.Command.Aggregate;
 
 import com.NTTT.PersonalInfoService.Command.Command.CreatePhysicCharsCommandObject;
 import com.NTTT.PersonalInfoService.Command.Command.UpdatePhysicCharsCommandObject;
+import com.NTTT.PersonalInfoService.Command.Data.ActivityLevel;
+import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
 import com.NTTT.PersonalInfoService.Command.Event.PhysicCharsCreateEventObject;
 import com.NTTT.PersonalInfoService.Command.Event.PhysicCharsUpdateEventObject;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -17,36 +17,35 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
+import java.util.List;
 
 @Aggregate
 public class PhysicCharsAggregate {
 
 
-    @AggregateIdentifier
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+
     private Integer id;
 
-    @Column(name = "userId")
+
     private String userId;
 
-    @Column(name = "age")
-    private Date age;
 
-    @Column(name = "sex")
-    private Date sex;
+    @AggregateIdentifier
+    private String physicCharsId;
 
-    @Column(name = "height")
+    private Integer age;
+
+    private Boolean sex;
+
     private String height;
 
-    @Column(name = "weightGoal")
     private String weightGoal;
 
-    @Column(name = "goal")
     private String goal;
 
-    @Column(name = "activityLevelId")
-    private Integer activityLevelId;
+    private ActivityLevel activityLevel;
+
+    private List<WeightTrack> weightTracks;
 
 
 
@@ -80,13 +79,14 @@ public class PhysicCharsAggregate {
     public void on(PhysicCharsCreateEventObject event)
     {
         this.id = event.getId();
-        this.activityLevelId = event.getActivityLevelId();
+        this.weightGoal = event.getWeightGoal();
+        this.physicCharsId =event.getPhysicCharsId();
+        this.activityLevel = event.getActivityLevel();
         this.age = event.getAge();
         this.goal = event.getGoal();
         this.sex = event.getSex();
         this.height = event.getHeight();
         this.userId = event.getUserId();
-        this.weightGoal = event.getWeightGoal();
 
     }
 
@@ -94,12 +94,13 @@ public class PhysicCharsAggregate {
     public void on(PhysicCharsUpdateEventObject event)
     {
         this.id = event.getId();
-        this.activityLevelId = event.getActivityLevelId();
+        this.weightGoal = event.getWeightGoal();
+        this.physicCharsId = event.getPhysicCharsId();
+        this.activityLevel = event.getActivityLevel();
         this.age = event.getAge();
         this.goal = event.getGoal();
         this.sex = event.getSex();
         this.height = event.getHeight();
         this.userId = event.getUserId();
-        this.weightGoal = event.getWeightGoal();
     }
 }

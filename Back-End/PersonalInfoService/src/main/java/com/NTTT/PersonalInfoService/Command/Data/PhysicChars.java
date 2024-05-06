@@ -9,26 +9,32 @@ import lombok.NoArgsConstructor;
 import org.axonframework.modelling.command.AggregateIdentifier;
 
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Data
 @Table(name = "PhysicChars")
 public class PhysicChars {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
+    @Column(name = "physicCharsId")
+    private String physicCharsId;
 
     @Column(name = "userId")
     private String userId;
 
     @Column(name = "age")
-    private Date age;
+    private Integer age;
 
     @Column(name = "sex")
-    private Date sex;
+    private Boolean sex;
 
     @Column(name = "height")
     private String height;
@@ -39,6 +45,10 @@ public class PhysicChars {
     @Column(name = "goal")
     private String goal;
 
-    @Column(name = "activityLevelId")
-    private Integer activityLevelId;
+    @OneToOne(mappedBy = "physicChars", cascade = CascadeType.ALL)
+    private ActivityLevel activityLevel;
+
+    @OneToMany(mappedBy = "physicChars", cascade = CascadeType.ALL)
+    private List<WeightTrack> weightTracks;
+
 }

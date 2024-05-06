@@ -102,7 +102,6 @@ public class UserAggregate {
         this.apple = event.getApple();
         this.userName = event.getUserName();
         this.activeStatus = event.getActiveStatus();
-        this.emailAddress = event.getEmailAddress();
         this.lastName = event.getLastName();
         this.phoneNumber = event.getPhoneNumber();
         this.facebook = event.getFacebook();
