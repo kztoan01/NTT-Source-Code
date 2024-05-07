@@ -23,9 +23,8 @@ public class WeightTrack {
     @Column(name = "currentWeight")
     private String currentWeight;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pyChId")
-    @JsonBackReference
     private PhysicChars physicChars;
 
 

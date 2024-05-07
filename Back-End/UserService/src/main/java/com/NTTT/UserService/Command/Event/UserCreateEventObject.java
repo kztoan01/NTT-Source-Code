@@ -10,42 +10,28 @@ import java.util.UUID;
 
 public class UserCreateEventObject {
 
-
-    private Integer id;
-
-    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "phoneNumber", nullable = false,unique = true)
     private String phoneNumber;
 
 
-    @Column(name = "emailAddress",unique = true)
     private String emailAddress;
 
-    @Column(name = "userName",nullable = false)
     private String userName;
 
-    @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "facebook")
     private String facebook;
 
-    @Column(name = "apple")
     private String apple;
 
-    @Column(name = "activeStatus")
     private Boolean activeStatus;
 
 
-    @Column(name = "userRole",nullable = false)
     private Integer userRole;
 
 
@@ -117,13 +103,6 @@ public class UserCreateEventObject {
         return activeStatus;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;

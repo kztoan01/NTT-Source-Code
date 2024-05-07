@@ -18,8 +18,10 @@ public class PhysicCharsEventHandler {
     {
         PhysicChars physicChars = new PhysicChars();
         BeanUtils.copyProperties(event,physicChars);
-        physicCharsRepository.save(physicChars);
+        PhysicChars savedPhysicChars = physicCharsRepository.save(physicChars);
+        event.getWeightTracks().forEach(weightTrack -> weightTrack.setPhysicChars(savedPhysicChars));
     }
+
 
     @EventHandler
     public void onUpdatePhysicChars(PhysicCharsUpdateEventObject event)

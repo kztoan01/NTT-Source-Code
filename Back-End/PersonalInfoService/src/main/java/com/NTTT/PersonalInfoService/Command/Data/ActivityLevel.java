@@ -17,25 +17,19 @@ public class ActivityLevel {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "ActivityName")
-    private String ActivityName;
+    @Column(name = "activityName")
+    private String activityName;
 
-    @Column(name = "ActivityType")
-    private Integer ActivityType;
+    @Column(name = "activityType")
+    private Integer activityType;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pyChId")
-    @JsonBackReference
+    @OneToOne(mappedBy = "activityLevel")
     private PhysicChars physicChars;
-
-
-    public ActivityLevel() {
-    }
 
     public ActivityLevel(Integer id, String activityName, Integer activityType, PhysicChars physicChars) {
         this.id = id;
-        ActivityName = activityName;
-        ActivityType = activityType;
+        this.activityName = activityName;
+        this.activityType = activityType;
         this.physicChars = physicChars;
     }
 
@@ -48,19 +42,19 @@ public class ActivityLevel {
     }
 
     public String getActivityName() {
-        return ActivityName;
+        return activityName;
     }
 
     public void setActivityName(String activityName) {
-        ActivityName = activityName;
+        this.activityName = activityName;
     }
 
     public Integer getActivityType() {
-        return ActivityType;
+        return activityType;
     }
 
     public void setActivityType(Integer activityType) {
-        ActivityType = activityType;
+        this.activityType = activityType;
     }
 
     public PhysicChars getPhysicChars() {

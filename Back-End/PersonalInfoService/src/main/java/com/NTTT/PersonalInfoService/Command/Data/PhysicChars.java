@@ -45,10 +45,11 @@ public class PhysicChars {
     @Column(name = "goal")
     private String goal;
 
-    @OneToOne(mappedBy = "physicChars", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "activityLevelId", referencedColumnName = "id")
     private ActivityLevel activityLevel;
 
-    @OneToMany(mappedBy = "physicChars", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "physicChars", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WeightTrack> weightTracks;
 
 }

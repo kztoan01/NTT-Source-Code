@@ -1,6 +1,7 @@
 package com.NTTT.UserService.Command.Aggregate;
 
 
+import com.NTTT.UserService.Command.Controller.AuthCommandController;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +10,8 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import com.NTTT.UserService.Command.Command.CreateUserCommandObject;
 import com.NTTT.UserService.Command.Command.UpdateUserCommandObject;
@@ -18,44 +21,31 @@ import com.NTTT.UserService.Command.Event.UserUpdateEventObject;
 @Aggregate
 public class UserAggregate {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Logger logger
+            = LoggerFactory.getLogger(AuthCommandController.class);
 
     @AggregateIdentifier
-    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "phoneNumber", nullable = false,unique = true)
     private String phoneNumber;
 
-
-
-    @Column(name = "emailAddress",unique = true)
     private String emailAddress;
 
-    @Column(name = "userName",nullable = false)
     private String userName;
 
-    @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "facebook")
     private String facebook;
 
-    @Column(name = "apple")
     private String apple;
 
-    @Column(name = "activeStatus")
     private Boolean activeStatus;
 
 
-    @Column(name = "userRole",nullable = false)
     private Integer userRole;
 
     public UserAggregate() {
@@ -64,6 +54,7 @@ public class UserAggregate {
     @CommandHandler
     public UserAggregate(CreateUserCommandObject createUserCommandObject)
     {
+        logger.info("test1");
         UserCreateEventObject event = new UserCreateEventObject();
         BeanUtils.copyProperties(createUserCommandObject, event);
         AggregateLifecycle.apply(event);
@@ -83,6 +74,7 @@ public class UserAggregate {
     @EventSourcingHandler
     public void on(UserCreateEventObject event)
     {
+        logger.info("Test1.5");
         this.userId = event.getUserId();
         this.apple = event.getApple();
         this.userName = event.getUserName();

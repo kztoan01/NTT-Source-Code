@@ -6,37 +6,26 @@ import jakarta.persistence.GenerationType;
 
 public class UserUpdateEventObject {
 
-    private Integer id;
 
-    @Column(name = "userId")
     private String userId;
 
-    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "phoneNumber", nullable = false,unique = true)
     private String phoneNumber;
 
-    @Column(name = "userName",nullable = false)
     private String userName;
 
-    @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "facebook")
     private String facebook;
 
-    @Column(name = "apple")
     private String apple;
 
-    @Column(name = "activeStatus")
     private Boolean activeStatus;
 
 
-    @Column(name = "userRole",nullable = false)
     private Integer userRole;
 
 
@@ -101,13 +90,6 @@ public class UserUpdateEventObject {
         return activeStatus;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
