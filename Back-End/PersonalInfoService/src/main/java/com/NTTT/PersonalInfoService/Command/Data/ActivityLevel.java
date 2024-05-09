@@ -33,6 +33,9 @@ public class ActivityLevel {
         this.physicChars = physicChars;
     }
 
+    public ActivityLevel() {
+    }
+
     public Integer getId() {
         return id;
     }

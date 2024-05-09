@@ -17,23 +17,23 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: userservice
-          uri: lb://userservice
+        - id: userServiceAuth
+          uri: http://localhost:8080
           predicates:
             - Path=/auth/**
-        - id: userservice
-          uri: lb://userservice
+        - id: userServiceCommand
+          uri: http://localhost:8080
           predicates:
             - Path=/user/**
           filters:
             - AuthenticationFilter
-        - id: usersservice
-          uri: lb://usersservice
+        - id: userServiceQuery
+          uri: http://localhost:8080
           predicates:
-            - Path=/api/users/**
+            - Path=/users/**
           filters:
             - AuthenticationFilter
-        - id: persionalinforservice
+        - id: personalInformService
           uri: lb://personalinfoservice
           predicates:
             - Path=/personalInfo/**

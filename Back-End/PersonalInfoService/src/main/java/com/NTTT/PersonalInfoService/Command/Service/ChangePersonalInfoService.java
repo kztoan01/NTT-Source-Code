@@ -2,6 +2,8 @@ package com.NTTT.PersonalInfoService.Command.Service;
 
 
 import com.NTTT.PersonalInfoService.Command.Command.CreatePhysicCharsCommandObject;
+import com.NTTT.PersonalInfoService.Command.Command.UpdatePhysicCharsWeightCommandObject;
+import com.NTTT.PersonalInfoService.Command.Model.AddWeightTrackRequestDTO;
 import com.NTTT.PersonalInfoService.Command.Model.ChangePersonalInfoRequestDTO;
 import com.NTTT.PersonalInfoService.Command.Model.ResponseObject;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -28,6 +30,17 @@ public class ChangePersonalInfoService {
         ResponseObject responseObject = new ResponseObject();
         responseObject.setChangeSuccessfully(true);
         responseObject.setMessage("Created PersonalInfo");
+        responseObject.setStatusCode(200);
+        return  responseObject;
+    }
+
+    public ResponseObject updateWeightTracks( AddWeightTrackRequestDTO addWeightTrackRequestDTO)
+    {
+        UpdatePhysicCharsWeightCommandObject updatePhysicCharsWeightCommandObject = new UpdatePhysicCharsWeightCommandObject(addWeightTrackRequestDTO.getPhysicCharsId(),addWeightTrackRequestDTO.getWeightTracks());
+        commandGateway.sendAndWait(updatePhysicCharsWeightCommandObject);
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setChangeSuccessfully(true);
+        responseObject.setMessage("Added new WeightTrack");
         responseObject.setStatusCode(200);
         return  responseObject;
     }

@@ -1,11 +1,13 @@
 package com.NTTT.UserService.Command.Service;
 
 
+import com.NTTT.UserService.Command.Model.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,6 @@ import com.NTTT.UserService.Command.Controller.AuthCommandController;
 import com.NTTT.UserService.Command.Data.OtpEntityRepository;
 import com.NTTT.UserService.Command.Data.User;
 import com.NTTT.UserService.Command.Data.UserRepository;
-import com.NTTT.UserService.Command.Model.ErrorDTO;
-import com.NTTT.UserService.Command.Model.ResponseObject;
-import com.NTTT.UserService.Command.Model.changeInfoRequest;
-import com.NTTT.UserService.Command.Model.changePasswordRequest;
 import com.NTTT.UserService.Query.Service.AuthQueryService;
 import com.NTTT.UserService.clients.EmailClient;
 
@@ -45,6 +43,9 @@ public class UserService {
 
     @Autowired
     OtpEntityRepository otpEntityRepository;
+
+    @Autowired
+    KafkaTemplate kafkaTemplate;
 
     @Autowired
     OtpService otpService;
@@ -79,7 +80,11 @@ public class UserService {
                 logger.info("flag1");
                 int otp = 100000 + rand.nextInt(900000);
                 otpService.AddOtp(otp,"ChangePassword", foundUser.getEmailAddress());
-                emailClient.sendMail("Changing password otp","Hi,We would like to send you OTP:"+otp,foundUser.getEmailAddress());
+                EmailObject emailObject = new EmailObject();
+                emailObject.setRecipient(foundUser.getEmailAddress());
+                emailObject.setOtp(otp);
+                emailObject.setMessage("We would like to send you otp:");
+                kafkaTemplate.send("notification",emailObject);
                 responseObject.setMessage("Send email successfully!");
                 responseObject.setChangeSuccessfully(false);
             }

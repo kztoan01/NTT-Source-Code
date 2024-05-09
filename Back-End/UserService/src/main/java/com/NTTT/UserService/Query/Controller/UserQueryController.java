@@ -16,7 +16,7 @@ import  com.NTTT.UserService.Query.Service.UserQueryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserQueryController {
 
 

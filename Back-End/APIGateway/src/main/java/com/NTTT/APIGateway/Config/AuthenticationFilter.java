@@ -51,22 +51,29 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 logger.info("Test13"+userRoles.get(0).toString());
                 try {
                     String Email = jwtUtil.extractEmail(authHeader);
-                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/api/users/getByEmail/" + Email, ResponseObject.class);
+                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/users/getByEmail/" + Email, ResponseObject.class);
                     logger.info("Test:11"+responseObject.getResponseUserDTO().getEmailAddress());
                     logger.info(String.valueOf(responseObject.getStatusCode()));
                     if(responseObject.getStatusCode() == 200)
                     {
                         logger.info("Test:12");
-
+                        String requestPath = exchange.getRequest().getPath().toString();
                         if (userRoles.contains("ADMIN")) {
                             logger.info("test Admin");
-                            return chain.filter(exchange);
+                            if (requestPath.contains("/users"))
+                            {
+                                return chain.filter(exchange);
+                            }
+                            else
+                            {
+                                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                                return exchange.getResponse().setComplete();
+                            }
                         }
                         else if (userRoles.contains("MANAGER")) {
                             logger.info("test Manager");
-                            String requestPath = exchange.getRequest().getPath().toString();
                             logger.info(requestPath);
-                            if (requestPath.startsWith("/api/users"))
+                            if (requestPath.contains("/users"))
                             {
                                 return chain.filter(exchange);
                             }
@@ -78,7 +85,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         }
                         else if (userRoles.contains("USER")) {
                             logger.info("test User");
-                            String requestPath = exchange.getRequest().getPath().toString();
+                             logger.info(requestPath);
                             if (requestPath.contains("/auth/") || requestPath.contains("/user/") || requestPath.contains("/personalInfo/")) {
                                 return chain.filter(exchange);
                             } else {

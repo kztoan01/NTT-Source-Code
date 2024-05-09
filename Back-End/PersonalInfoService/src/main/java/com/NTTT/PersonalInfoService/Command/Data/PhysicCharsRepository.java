@@ -9,4 +9,6 @@ public interface PhysicCharsRepository extends JpaRepository<PhysicChars, Intege
 
   Optional<PhysicChars> findById(int Id);
 
+  Optional<PhysicChars> findByPhysicCharsId(String physicCharsId);
+
 }

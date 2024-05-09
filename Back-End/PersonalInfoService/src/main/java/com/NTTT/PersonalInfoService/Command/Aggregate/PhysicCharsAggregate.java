@@ -4,16 +4,21 @@ package com.NTTT.PersonalInfoService.Command.Aggregate;
 
 import com.NTTT.PersonalInfoService.Command.Command.CreatePhysicCharsCommandObject;
 import com.NTTT.PersonalInfoService.Command.Command.UpdatePhysicCharsCommandObject;
+import com.NTTT.PersonalInfoService.Command.Command.UpdatePhysicCharsWeightCommandObject;
 import com.NTTT.PersonalInfoService.Command.Data.ActivityLevel;
 import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
 import com.NTTT.PersonalInfoService.Command.Event.PhysicCharsCreateEventObject;
 import com.NTTT.PersonalInfoService.Command.Event.PhysicCharsUpdateEventObject;
+import com.NTTT.PersonalInfoService.Command.Event.PhysicCharsUpdateWeightTrackEventObject;
+import com.NTTT.PersonalInfoService.Command.Model.ChangePersonalInfoRequestDTO;
 import jakarta.persistence.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -22,6 +27,8 @@ import java.util.List;
 @Aggregate
 public class PhysicCharsAggregate {
 
+    Logger logger
+            = LoggerFactory.getLogger(PhysicCharsAggregate.class);
 
 
     private Integer id;
@@ -53,6 +60,8 @@ public class PhysicCharsAggregate {
 
 
 
+
+
     public PhysicCharsAggregate() {
     }
 
@@ -72,6 +81,16 @@ public class PhysicCharsAggregate {
         PhysicCharsUpdateEventObject userUpdateEventObject = new PhysicCharsUpdateEventObject();
         BeanUtils.copyProperties(updatePhysicCharsCommandObject, userUpdateEventObject);
         AggregateLifecycle.apply(userUpdateEventObject);
+
+    }
+
+    @CommandHandler
+    public void handleUpdateWeightTrack(UpdatePhysicCharsWeightCommandObject updatePhysicCharsWeightCommandObject)
+    {
+        logger.info("Test1");
+        PhysicCharsUpdateWeightTrackEventObject physicCharsUpdateWeightTrackEventObject = new PhysicCharsUpdateWeightTrackEventObject();
+        BeanUtils.copyProperties(updatePhysicCharsWeightCommandObject, physicCharsUpdateWeightTrackEventObject);
+        AggregateLifecycle.apply(physicCharsUpdateWeightTrackEventObject);
 
     }
 
@@ -102,5 +121,13 @@ public class PhysicCharsAggregate {
         this.sex = event.getSex();
         this.height = event.getHeight();
         this.userId = event.getUserId();
+    }
+
+    @EventSourcingHandler
+    public void on(PhysicCharsUpdateWeightTrackEventObject event)
+    {
+           logger.info("Test2");
+           this.physicCharsId = event.getPhysicCharsId();
+           this.weightTracks = event.getWeightTracks();
     }
 }
