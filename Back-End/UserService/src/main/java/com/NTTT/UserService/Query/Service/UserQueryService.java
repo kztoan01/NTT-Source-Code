@@ -58,15 +58,17 @@ public class UserQueryService {
         GetUserQuery getUsersQuery = new GetUserQuery();
 
         ResponseObject responseObject = new ResponseObject();
+        logger.info(userRepository.findByUserName(username).orElseThrow().getUsername());
+        getUsersQuery.setUserId(userRepository.findByUserName(username).orElseThrow().getUserId());
         try
         {
-            getUsersQuery.setUserId(userRepository.findByUserName(username).orElseThrow().getUserId());
-            ResponseUserDTO UserResponseModel =
+
+            ResponseUserDTO userResponseModel =
                     queryGateway.query(getUsersQuery,
                                     ResponseTypes.instanceOf(ResponseUserDTO.class))
                             .join();
             responseObject.setStatusCode(200);
-            responseObject.setResponseUserDTO(UserResponseModel);
+            responseObject.setResponseUserDTO(userResponseModel);
             responseObject.setChangeSuccessfully(false);
         }
         catch (Exception e)

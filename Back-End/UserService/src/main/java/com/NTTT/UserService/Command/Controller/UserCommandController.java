@@ -1,4 +1,5 @@
 package com.NTTT.UserService.Command.Controller;
+import com.NTTT.UserService.Command.Model.SendPhoneOtpRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,4 +39,11 @@ public class UserCommandController {
     public ResponseObject changePassword(@RequestBody changePasswordRequest changePasswordRequest) throws IOException {
         return userService.changeUserPassword(changePasswordRequest);
     }
+
+    @PostMapping("/sendPhoneOtp")
+    public ResponseObject sendPhoneOtp(@RequestBody SendPhoneOtpRequest sendPhoneOtpRequest) throws IOException {
+        return userService.sendPhoneOtp(sendPhoneOtpRequest);
+    }
+
+
 }

@@ -34,7 +34,7 @@ spring:
           filters:
             - AuthenticationFilter
         - id: personalInformService
-          uri: lb://personalinfoservice
+          uri: http://localhost:8088
           predicates:
             - Path=/personalInfo/**
           filters:

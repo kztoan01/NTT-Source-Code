@@ -2,6 +2,7 @@ package com.NTTT.UserService.Command.Service;
 
 
 import com.NTTT.UserService.Command.Model.*;
+import org.apache.kafka.common.network.Send;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,6 +112,14 @@ public class UserService {
         } catch (Exception e) {
             System.out.println("An error occurred while changing the password: " + e.getMessage());
         }
+        return responseObject;
+    }
+
+
+
+    public ResponseObject sendPhoneOtp(SendPhoneOtpRequest sendPhoneOtpRequest) {
+        ResponseObject responseObject = new ResponseObject();
+        kafkaTemplate.send("otp",sendPhoneOtpRequest.getPhoneNumber());
         return responseObject;
     }
 

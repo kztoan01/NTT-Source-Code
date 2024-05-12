@@ -48,7 +48,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 List<String> userRoles = jwtUtil.extractUserRoles(authHeader);
-                logger.info("Test13"+userRoles.get(0).toString());
                 try {
                     String Email = jwtUtil.extractEmail(authHeader);
                     ResponseObject responseObject =  template.getForObject("http://localhost:8080/users/getByEmail/" + Email, ResponseObject.class);
