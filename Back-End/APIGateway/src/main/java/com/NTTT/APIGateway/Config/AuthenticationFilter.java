@@ -48,11 +48,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 List<String> userRoles = jwtUtil.extractUserRoles(authHeader);
+
                 try {
-                    String Email = jwtUtil.extractEmail(authHeader);
-                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/users/getByEmail/" + Email, ResponseObject.class);
-                    logger.info("Test:11"+responseObject.getResponseUserDTO().getEmailAddress());
-                    logger.info(String.valueOf(responseObject.getStatusCode()));
+                    String email = jwtUtil.extractEmail(authHeader);
+                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/users/getByEmail/" + email, ResponseObject.class);
                     if(responseObject.getStatusCode() == 200)
                     {
                         logger.info("Test:12");
@@ -72,7 +71,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         else if (userRoles.contains("MANAGER")) {
                             logger.info("test Manager");
                             logger.info(requestPath);
-                            if (requestPath.contains("/users"))
+                            if (requestPath.contains("/users/"))
                             {
                                 return chain.filter(exchange);
                             }

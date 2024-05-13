@@ -22,27 +22,13 @@ public class UserProjection {
     private UserRepository UserRepository;
 
     @QueryHandler
-    public ResponseObject handle(GetUserQuery getUsersQuery) {
+    public ResponseUserDTO handle(GetUserQuery getUsersQuery) {
 
-
-        ResponseObject responseObject = new ResponseObject();
         ResponseUserDTO model = new ResponseUserDTO();
-        try
-        {
             User user = UserRepository.findByUserId(getUsersQuery.getUserId()).orElseThrow();
             BeanUtils.copyProperties(user, model);
-            responseObject.setStatusCode(200);
-            responseObject.setResponseUserDTO(model);
-            responseObject.setChangeSuccessfully(false);
-        }
-        catch (Exception e)
-        {
-            responseObject.setStatusCode(404);
-            responseObject.setMessage("UserId not found!");
-            responseObject.setChangeSuccessfully(false);
-        }
 
-        return  responseObject;
+        return model;
     }
     @QueryHandler
     List<ResponseUserDTO> handle(GetAllUsersQuery getAllUsersQuery){

@@ -40,29 +40,10 @@ public class UserQueryService {
     
     public ResponseObject getUserDetail(String UserId) {
         GetUserQuery getUsersQuery = new GetUserQuery();
-        getUsersQuery.setUserId(UserId);
         ResponseObject responseObject = new ResponseObject();
-            userRepository.findByUserId(UserId);
-            ResponseObject UserResponseObject =
-                    queryGateway.query(getUsersQuery,
-                                    ResponseTypes.instanceOf(ResponseObject.class))
-                            .join();
-            responseObject = UserResponseObject;
-            responseObject.setChangeSuccessfully(false);
-
-
-        return responseObject;
-    }
-
-    public ResponseObject getUserDetailByUsername(String username) {
-        GetUserQuery getUsersQuery = new GetUserQuery();
-
-        ResponseObject responseObject = new ResponseObject();
-        logger.info(userRepository.findByUserName(username).orElseThrow().getUsername());
-        getUsersQuery.setUserId(userRepository.findByUserName(username).orElseThrow().getUserId());
         try
         {
-
+            getUsersQuery.setUserId(UserId);
             ResponseUserDTO userResponseModel =
                     queryGateway.query(getUsersQuery,
                                     ResponseTypes.instanceOf(ResponseUserDTO.class))
@@ -74,7 +55,36 @@ public class UserQueryService {
         catch (Exception e)
         {
             responseObject.setStatusCode(404);
-            responseObject.setMessage("Username not found!");
+            responseObject.setMessage("Error Query User.Not Found!");
+            responseObject.setChangeSuccessfully(false);
+        }
+
+
+        return responseObject;
+    }
+
+    public ResponseObject getUserDetailByUsername(String username) {
+        GetUserQuery getUsersQuery = new GetUserQuery();
+
+        ResponseObject responseObject = new ResponseObject();
+
+
+        try
+        {
+            logger.info(userRepository.findByUserName(username).orElseThrow().getUserId());
+            getUsersQuery.setUserId(userRepository.findByUserName(username).orElseThrow().getUserId());
+            ResponseUserDTO userResponseModel =
+                    queryGateway.query(getUsersQuery,
+                                    ResponseTypes.instanceOf(ResponseUserDTO.class))
+                            .join();
+            responseObject.setStatusCode(200);
+            responseObject.setResponseUserDTO(userResponseModel);
+            responseObject.setChangeSuccessfully(false);
+        }
+        catch (Exception e)
+        {
+            responseObject.setStatusCode(404);
+            responseObject.setMessage("Error Query User.Not Found!");
             responseObject.setChangeSuccessfully(false);
         }
         return responseObject;
@@ -83,14 +93,18 @@ public class UserQueryService {
     public ResponseObject getUserDetailByUserEmail(String userEmail) {
         GetUserQuery getUsersQuery = new GetUserQuery();
         ResponseObject responseObject = new ResponseObject();
+        logger.info("Test"+userRepository.findByEmailAddress(userEmail).orElseThrow().getUserId());
         try
         {
             getUsersQuery.setUserId(userRepository.findByEmailAddress(userEmail).orElseThrow().getUserId());
-           ResponseObject responseObject1 =
+
+            ResponseUserDTO userResponseModel =
                     queryGateway.query(getUsersQuery,
-                                    ResponseTypes.instanceOf(ResponseObject.class))
+                                    ResponseTypes.instanceOf(ResponseUserDTO.class))
                             .join();
-           responseObject = responseObject1;
+            responseObject.setStatusCode(200);
+            responseObject.setResponseUserDTO(userResponseModel);
+            responseObject.setChangeSuccessfully(false);
         }
         catch (Exception e)
         {
