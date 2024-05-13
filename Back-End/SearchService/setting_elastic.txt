@@ -1,0 +1,57 @@
+PUT food
+{
+   "settings": {
+        "index": {
+            "analysis": {
+            "analyzer": {
+                "ngram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": ["haystack_ngram"]
+                },
+                "edgengram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "standard",
+                    "filter": ["haystack_edgengram","lowercase","uppercase"]
+                },
+                "suggest_analyzer": {
+                    "type":"custom",
+                    "tokenizer":"standard",
+                    "filter":[
+                        "uppercase",
+                        "lowercase"
+                    ]
+
+                }
+            },
+            "filter": {
+                "haystack_ngram": {
+                    "type": "ngram",
+                    "min_gram": 1,
+                    "max_gram": 15
+                },
+                "haystack_edgengram": {
+                    "type": "edge_ngram",
+                    "min_gram": 1,
+                    "max_gram": 15
+                }
+            }
+        }
+    },
+            "number_of_shards": "1",
+            "number_of_replicas": "0",
+            "max_ngram_diff" : "50"
+        }
+    }
+}
+
+PUT food/_mapping
+{
+  "properties" : {
+    "name" : {
+      "type" : "text",
+      "analyzer" : "ngram_analyzer"
+     }
+    }
+  }
+}
