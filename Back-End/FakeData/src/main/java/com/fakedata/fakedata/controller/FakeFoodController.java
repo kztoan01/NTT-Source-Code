@@ -1,6 +1,7 @@
 package com.fakedata.fakedata.controller;
 
 import com.fakedata.fakedata.DTO.Food;
+import com.fakedata.fakedata.DTO.Recipe;
 import com.fakedata.fakedata.service.FakeFoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,9 @@ public class FakeFoodController {
     @GetMapping("/{total}")
     public ResponseEntity<List<Food>> getFakeFood(@PathVariable int total) {
         return ResponseEntity.ok(fakeFoodService.generateFakeFood(total));
+    }
+    @GetMapping("/recipe/{total}")
+    public ResponseEntity<List<Recipe>> getFakeRecipe(@PathVariable int total) {
+        return ResponseEntity.ok(fakeFoodService.generateFakeRecipe(total));
     }
 }
