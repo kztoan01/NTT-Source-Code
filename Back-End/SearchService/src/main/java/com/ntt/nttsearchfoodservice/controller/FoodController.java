@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +26,12 @@ public class FoodController {
     @Autowired
     private FoodMongodbService foodMongodbService;
     @Autowired
-    private FoodElasticService foodElasticService;
-    @Autowired
     private ElasticService elasticService;
     @Autowired
     private FilesStorageService storageService;
 
     @GetMapping("/suggest/{searchValue}")
-    public ResponseEntity<List<String>> suggestFood(@PathVariable String searchValue) throws Exception {
+    public ResponseEntity<List<String>> suggestFood(@PathVariable String searchValue) throws IOException {
         List<Food> food = elasticService.autoSuggest(searchValue);
         List<String> listName = new ArrayList<>();
         for (Food food1 : food) {
@@ -40,10 +39,8 @@ public class FoodController {
         }
         return ResponseEntity.ok(listName);
     }
-    @SneakyThrows
-    @ExceptionHandler(Exception.class)
     @GetMapping("/search/{searchValue}")
-    public ResponseEntity<ListPaging<Food>> searchFood(@PathVariable String searchValue) {
+    public ResponseEntity<ListPaging<Food>> searchFood(@PathVariable String searchValue) throws IOException {
         ListPaging<Food> foodList = new ListPaging<>();
         foodList.setPageSize(10);
         foodList.setData(foodMongodbService.getListFood(elasticService.search(searchValue)));
@@ -57,9 +54,9 @@ public class FoodController {
 
     @GetMapping("/getall")
     public ResponseEntity<List<Food>> getAllFood() {
-        //TODO: Return về tất cả thông tin của tất cả món ăn, có phân trang(8 food/ trang)
-        //FIXME:
-        // -Return tạm, sẽ viết sau
+        ListPaging<Food> foodList = new ListPaging<>();
+        foodList.setPageSize(8);
+        foodList.setData(foodMongodbService.getAllFood());
         return ResponseEntity.ok(new ArrayList<>());
     }
 
@@ -76,7 +73,6 @@ public class FoodController {
         String message = "";
         try {
             storageService.save(file);
-
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } catch (Exception e) {

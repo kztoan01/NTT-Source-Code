@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ElasticServiceIml implements ElasticService {
     @Autowired
     private ElasticsearchClient elasticsearchClient;
     @Override
-    public List<Food> autoSuggest(String partialName) throws Exception{
+    public List<Food> autoSuggest(String partialName) throws IOException{
         Supplier<Query> supplier = ESUtil.createSupplierAutoSuggest(partialName);
         SearchResponse<Food> response = elasticsearchClient.search(s->
                 s.index("food")
@@ -39,7 +40,7 @@ public class ElasticServiceIml implements ElasticService {
     }
 
     @Override
-    public List<Food> search(String partialName) throws Exception {
+    public List<Food> search(String partialName) throws IOException {
         Supplier<Query> supplier = ESUtil.createSupplierAutoSuggest(partialName);
         SearchResponse<Food> response = elasticsearchClient.search(s->
                 s.index("food")
