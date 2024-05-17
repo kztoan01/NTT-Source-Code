@@ -60,13 +60,6 @@ public class FoodController {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping("/download/dup")
-    public ResponseEntity<Resource> downloadFood() {
-        Resource resource = storageService.load("TODO.txt");
-        return  ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
 
     @PostMapping("/upload")
     public ResponseEntity<String> excel(@RequestParam("file") MultipartFile file ) {
