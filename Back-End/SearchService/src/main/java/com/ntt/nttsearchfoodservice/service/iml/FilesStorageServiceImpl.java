@@ -1,18 +1,30 @@
 package com.ntt.nttsearchfoodservice.service.iml;
 
+import com.ntt.nttsearchfoodservice.dto.Food;
+import com.ntt.nttsearchfoodservice.exception.UploadException;
 import com.ntt.nttsearchfoodservice.service.FilesStorageService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -20,41 +32,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     private final Path root = Paths.get("src/main/resources/static");
 
     @Override
-    public void init() {
-        try {
+    public void init() throws IOException {
+
             Files.createDirectories(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
+
     }
 
     @Override
-    public void save(MultipartFile file) {
-        try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-        } catch (Exception e) {
-            if (e instanceof FileAlreadyExistsException) {
-                throw new RuntimeException("A file of that name already exists.");
-            }
-
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Override
-    public Resource load(String filename) {
-        try {
-            Path file = root.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("Could not read the file!");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
-        }
+    public void save(MultipartFile file) throws UploadException, IOException {
+        deleteAll();
+        Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
     }
 
     @Override
@@ -62,12 +49,31 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         FileSystemUtils.deleteRecursively(root.toFile());
     }
 
+
     @Override
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load the files!");
+    public List<Food> toFoodList(String fileName) throws IOException{
+        Workbook workbook = new XSSFWorkbook(new FileInputStream(root.resolve(fileName).toFile()));
+        Sheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rowIterator = sheet.iterator();
+        List<Food> foodList = new ArrayList<>();
+        boolean flag = false;
+        for (Row row : sheet) {
+            Food food = new Food();
+            if (!flag) {
+                flag = true;
+                continue;
+            }
+            food.setName(row.getCell(0).toString());
+            food.setCalories(row.getCell(1).getNumericCellValue());
+            food.setProtein(row.getCell(2).getNumericCellValue());
+            food.setFat(row.getCell(3).getNumericCellValue());
+            food.setCarbs(row.getCell(4).getNumericCellValue());
+            food.setDescription(row.getCell(5).toString());
+            food.setImage(row.getCell(6).toString());
+            foodList.add(food);
         }
+        workbook.close();
+        deleteAll();
+        return foodList;
     }
 }
