@@ -85,8 +85,12 @@ public class AuthCommandService {
                 responseObject.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
             }
             else {
-                if( otpEntityRepository.findByUserEmail(registrationRequest.getGmail()) == null && registrationRequest.getOtp() == 0)
+                if(registrationRequest.getOtp() == 0)
                 {
+                    if(otpEntityRepository.findByUserEmail(registrationRequest.getGmail()) != null)
+                    {
+                        otpEntityRepository.delete(otpEntityRepository.findByUserEmail(registrationRequest.getGmail()));
+                    }
                     int otp = 100000 + rand.nextInt(900000);
                     otpService.AddOtp(otp,"VerifyEmail", registrationRequest.getGmail());
                     EmailObject emailObject = new EmailObject();
@@ -97,7 +101,7 @@ public class AuthCommandService {
                     responseObject.setMessage("Send email successfully!");
                     responseObject.setChangeSuccessfully(false);
                 }
-                else if(otpEntityRepository.findByUserEmail(registrationRequest.getGmail()) != null && registrationRequest.getOtp() != 0)
+                else if(otpEntityRepository.findByUserEmail(registrationRequest.getGmail()).getOtp().equals(registrationRequest.getOtp()))
                 {
                     logger.info("test");
                     String id = UUID.randomUUID().toString();
@@ -108,6 +112,12 @@ public class AuthCommandService {
                     responseObject.setMessage(id);
                     responseObject.setChangeSuccessfully(true);
                     responseObject.setStatusCode(HttpStatus.CREATED.value());
+                }
+                else
+                {
+                    responseObject.setChangeSuccessfully(false);
+                    responseObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                    responseObject.setMessage("Invalid otp");
                 }
             }
         } catch (DataAccessException e) {
@@ -122,7 +132,7 @@ public class AuthCommandService {
         try {
             User foundUser = userRepository.findByUserId(changePasswordRequest.getUserId()).orElseThrow();
 
-            if(foundUser.getEmailAddress() != null)
+            if(foundUser.getUserId()!=null)
                 {
                     foundUser.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
                     userRepository.save(foundUser);
@@ -138,7 +148,8 @@ public class AuthCommandService {
                     responseObject.setChangeSuccessfully(false);
                 }
         } catch (Exception e) {
-            System.out.println("An error occurred while changing the password: " + e.getMessage());
+            responseObject.setMessage("An error occurred while changing the password: " + e.getMessage());
+            responseObject.setChangeSuccessfully(false);
         }
         return responseObject;
     }

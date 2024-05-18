@@ -1,6 +1,7 @@
-version: "2.2"
+version: "2.3"
 
 services:
+  
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
@@ -61,12 +62,15 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
+    networks:
+      - NTTNetwork
 
   es01:
     depends_on:
       setup:
         condition: service_healthy
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: es01
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
@@ -104,11 +108,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - NTTNetwork
 
   es02:
     depends_on:
       - es01
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: es02
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata02:/usr/share/elasticsearch/data
@@ -143,11 +150,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - NTTNetwork
 
   es03:
     depends_on:
       - es02
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: es03
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata03:/usr/share/elasticsearch/data
@@ -182,6 +192,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - NTTNetwork
 
   kibana:
     depends_on:
@@ -213,8 +225,35 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - NTTNetwork
 
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.14-rc0-focal
+    restart: always
+    ports:
+     - "27017:27017"
+    networks:
+      - NTTNetwork
+
+  search-svc:
+    container_name: search-svc
+    networks:
+      - NTTNetwork
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8444:8444"
+    depends_on:
+      - es01
+      - es02
+      - es03
 volumes:
+  axonserver-data:
+  axonserver-events:
+  axonserver-config:
   certs:
     driver: local
   esdata01:
@@ -225,3 +264,7 @@ volumes:
     driver: local
   kibanadata:
     driver: local
+
+networks:
+  NTTNetwork:
+    driver: bridge

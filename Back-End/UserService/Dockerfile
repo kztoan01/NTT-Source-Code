@@ -22,16 +22,8 @@ COPY ./UserService/src /workdir/server/src
 RUN mvn -Pprod clean package -DskipTests
     
 FROM builder AS dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-    
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
+RUN apt-get update && apt-get install -y --no-install-recommends git
+RUN useradd -s /bin/bash -m vscode && groupadd docker && usermod -aG docker vscode
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
 CMD ["mvn", "spring-boot:run"]

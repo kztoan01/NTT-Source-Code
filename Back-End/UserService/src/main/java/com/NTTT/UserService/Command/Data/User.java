@@ -37,17 +37,17 @@ public class User{
     @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "phoneNumber", nullable = false,unique = true)
+    @Column(name = "phoneNumber")
     private String phoneNumber;
 
 
-    @Column(name = "emailAddress",unique = true)
+    @Column(name = "emailAddress")
     private String emailAddress;
 
-    @Column(name = "userName",nullable = false)
+    @Column(name = "userName")
     private String userName;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "facebook")
