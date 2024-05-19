@@ -15,6 +15,6 @@ public class ESUtil {
 
     public static MatchQuery createAutoSuggestMatchQuery(String partialProductName) {
         val autoSuggestQuery = new MatchQuery.Builder();
-        return autoSuggestQuery.field("name").query(partialProductName).analyzer("ngram_analyzer").build();
+        return autoSuggestQuery.field("name").query(partialProductName).analyzer("edgengram_analyzer").build();
     }
 }

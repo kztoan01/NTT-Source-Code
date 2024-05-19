@@ -1,3 +1,26 @@
+# Click the Variables button, above, to create your own variables.
+GET ${exampleVariable1} // _search
+{
+  "query": {
+    "${exampleVariable2}": {} // match_all
+  }
+}
+GET /_nodes
+PUT food
+DELETE food
+GET food/_search
+{
+  "size": 100,
+  "from": 0, 
+  "query": {
+    "match": {
+      "name": "chi"
+      
+      }
+  }
+}
+GET food/_search
+
 PUT food
 {
    "settings": {
@@ -32,7 +55,7 @@ PUT food
                 },
                 "haystack_edgengram": {
                     "type": "edge_ngram",
-                    "min_gram": 1,
+                    "min_gram": 3,
                     "max_gram": 15
                 }
             }
@@ -50,8 +73,9 @@ PUT food/_mapping
   "properties" : {
     "name" : {
       "type" : "text",
-      "analyzer" : "ngram_analyzer"
+      "analyzer" : "edgengram_analyzer"
      }
     }
   }
 }
+
