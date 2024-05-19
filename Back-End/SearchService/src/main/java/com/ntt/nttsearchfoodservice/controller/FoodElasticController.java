@@ -18,4 +18,8 @@ public class FoodElasticController {
     private ResponseEntity<List<Food>> updateFoodElastic() {
         return ResponseEntity.ok(foodElasticService.insertAllFood());
     }
+    @GetMapping("/")
+    private ResponseEntity<String> homedocudo() {
+        return ResponseEntity.ok("foodElastic");
+    }
 }

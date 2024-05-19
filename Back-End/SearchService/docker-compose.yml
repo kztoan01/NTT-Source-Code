@@ -109,6 +109,7 @@ services:
     networks:
       - NTTNetwork
 
+
   es02:
     depends_on:
       - es01
@@ -150,6 +151,7 @@ services:
       retries: 120
     networks:
       - NTTNetwork
+
 
   es03:
     depends_on:
@@ -193,6 +195,7 @@ services:
     networks:
       - NTTNetwork
 
+
   kibana:
     depends_on:
       es01:
@@ -226,7 +229,10 @@ services:
     networks:
       - NTTNetwork
 
+
   mongo:
+    depends_on:
+      - kibana
     container_name: mongo
     image: mongo:4.4.14-rc0-focal
     restart: always
@@ -236,7 +242,15 @@ services:
       - NTTNetwork
 
   search-svc:
+    depends_on:
+      - mongo
+      - es01
+      - es02
+      - es03
+      - kibana
     container_name: search-svc
+    environment:
+      - LOCAL_HOST=${LOCAL_HOST}
     networks:
       - NTTNetwork
     build:
@@ -244,10 +258,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8444:8444"
-    depends_on:
-      - es01
-      - es02
-      - es03
+
 volumes:
   axonserver-data:
   axonserver-events:

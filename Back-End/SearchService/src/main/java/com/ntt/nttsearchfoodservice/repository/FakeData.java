@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Repository
-@FeignClient(name = "FakeData", url = "http://localhost:8081", path = "/api/food/fake")
+@FeignClient(name = "FakeData", url = "${LOCAL_HOST}", path = "/api/food/fake")
 public interface FakeData {
     @GetMapping("/{id}")
     ResponseEntity<List<Food>> getFakeData(@PathVariable("id") int id);
