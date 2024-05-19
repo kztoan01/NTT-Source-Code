@@ -25,67 +25,103 @@ public class PhysicCharsEventHandler {
     @Autowired
     private UserPlanningService userPlanningService;
 
+    private UserPlanning calculateUserPlanning(PhysicChars physicChars) {
+        float baseCalories;
+        float neededCalories;
+        float caloriesBaseOnActivityLevel;
+        float neededProtein;
+        float neededCarbs;
+        float neededFat;
+    
 
-//    private UserPlanning caculateUserPlanning(PhysicChars physicChars)
-//    {
-//            float baseCalories;
-//            float neededCalories;
-//            float caloriesBaseOnActivityLevel;
-//            float neededProtein;
-//            float neededCarbs;
-//            float neededFat;
-//            float spRemainingEnergy;
-//        if(physicChars.getSex())
-//            {
-//                baseCalories = (float) ((10 * Integer.parseInt(physicChars.getWeightTracks().getLast().getCurrentWeight())) + (6.25 * Integer.parseInt(physicChars.getHeight())) - (5 * physicChars.getAge()) + 5);
-//            }
-//            else
-//            {
-//                baseCalories = (float) ((10 * Integer.parseInt(physicChars.getWeightTracks().getLast().getCurrentWeight())) + (6.25 * Integer.parseInt(physicChars.getHeight())) - (5 * physicChars.getAge()) - 161);
-//            }
-//
-//        String activityLevel = physicChars.getActivityLevel().getActivityName();
-//        float activityLevelMultiplier;
-//        activityLevelMultiplier = switch (activityLevel) {
-//            case "SEDENTARY" -> 1.2f;
-//            case "LIGHT" -> 1.55f;
-//            case "MODERATE" -> 1.85f;
-//            case "ACTIVE" -> 2.2f;
-//            case "VERY" -> 2.6f;
-//            default ->
-//                    throw new IllegalArgumentException("Invalid activityLevelMultiplier: ");
-//        };
-//        caloriesBaseOnActivityLevel = baseCalories * activityLevelMultiplier;
-//
-//        String goal = physicChars.getGoal();
-//        neededCalories = switch (goal) {
-//            case "LOSS" -> caloriesBaseOnActivityLevel * 15 / 100;
-//            case "GAIN" -> caloriesBaseOnActivityLevel + 500;
-//            case "MAINTENANCE" -> caloriesBaseOnActivityLevel;
-//            default -> throw new IllegalArgumentException("Invalid goal: " + goal);
-//        };
-//
-//        float proteinMultiplier = switch (activityLevel) {
-//            case "SEDENTARY" -> 0.8f;
-//            case "LIGHT" -> 1.0f;
-//            case "MODERATE" -> 1.3f;
-//            case "ACTIVE" -> 1.6f;
-//            default -> throw new IllegalArgumentException("Invalid goal: " + goal);
-//        };
-//
-//        neededProtein = Integer.parseInt(physicChars.getWeightTracks().getLast().getCurrentWeight()) * proteinMultiplier;
-//
-//
-//        spRemainingEnergy = (float)(neededCalories - 4.1 * neededProtein);
-//
-//
-//
-//
-//        return null;
-//
-//
-//    }
+        List<WeightTrack> weightTracks = physicChars.getWeightTracks();
+        if (weightTracks.isEmpty()) {
+            throw new IllegalArgumentException("Weight tracks list is empty");
+        }
+        WeightTrack lastWeightTrack = weightTracks.get(weightTracks.size() - 1);
+        int currentWeight = Integer.parseInt(lastWeightTrack.getCurrentWeight());
+        int height = Integer.parseInt(physicChars.getHeight());
+    
 
+        if (physicChars.getSex()) {
+            baseCalories = (float) ((10 * currentWeight) 
+                                  + (6.25 * height) 
+                                  - (5 * physicChars.getAge()) + 5);
+        } else {
+            baseCalories = (float) ((10 * currentWeight) 
+                                  + (6.25 * height) 
+                                  - (5 * physicChars.getAge()) - 161);
+        }
+    
+
+        String activityLevel = physicChars.getActivityLevel().getActivityName();
+        float activityLevelMultiplier;
+        activityLevelMultiplier = switch (activityLevel) {
+            case "SEDENTARY" -> 1.2f;
+            case "LIGHT" -> 1.375f;
+            case "MODERATE" -> 1.465f;
+            case "ACTIVE" -> 1.55f;
+            case "VERY" -> 1.73f;
+            default -> throw new IllegalArgumentException("Invalid activityLevel: " + activityLevel);
+        };
+        caloriesBaseOnActivityLevel = baseCalories * activityLevelMultiplier;
+
+        String goal = physicChars.getGoal();
+        neededCalories = switch (goal) {
+            case "LOSS" -> caloriesBaseOnActivityLevel * 0.85f; 
+            case "GAIN" -> caloriesBaseOnActivityLevel + 500;
+            case "MAINTENANCE" -> caloriesBaseOnActivityLevel;
+            default -> throw new IllegalArgumentException("Invalid goal: " + goal);
+        };
+    
+
+        String dietType = physicChars.getDietType(); 
+        float proteinRatio;
+        float carbRatio;
+        float fatRatio;
+    
+        switch (dietType) {
+            case "Balanced" -> {
+                proteinRatio = 0.25f;
+                carbRatio = 0.50f;
+                fatRatio = 0.25f;
+            }
+            case "Low Fat" -> {
+                proteinRatio = 0.275f;
+                carbRatio = 0.525f;
+                fatRatio = 0.20f;
+            }
+            case "Low Carb" -> {
+                proteinRatio = 0.30f;
+                carbRatio = 0.40f;
+                fatRatio = 0.30f;
+            }
+            case "High Protein" -> {
+                proteinRatio = 0.35f;
+                carbRatio = 0.425f;
+                fatRatio = 0.225f;
+            }
+            default -> throw new IllegalArgumentException("Invalid diet type: " + dietType);
+        }
+    
+        // Calculate neededProtein, neededCarbs, and neededFat
+        neededProtein = (neededCalories * proteinRatio) / 4.1f;
+        neededCarbs = (neededCalories * carbRatio) / 3.75f;
+        neededFat = (neededCalories * fatRatio) / 8.8f;
+    
+        // Create and return UserPlanning object
+        UserPlanning userPlanning = new UserPlanning();
+        userPlanning.setCalories(neededCalories);
+        userPlanning.setCarbs(neededCarbs);
+        userPlanning.setFat(neededFat);
+        userPlanning.setPlaneType(physicChars.getActivityLevel());
+        userPlanning.setNeededFat(neededFat);
+    
+        return userPlanning;
+    }
+    
+    
+    
 
     Logger logger
             = LoggerFactory.getLogger(PhysicCharsEventHandler.class);

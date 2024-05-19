@@ -45,6 +45,10 @@ public class PhysicChars {
     @Column(name = "goal")
     private String goal;
 
+
+    @Column(name = "dietType")
+    private String dietType;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityLevelId", referencedColumnName = "id")
     private ActivityLevel activityLevel;
