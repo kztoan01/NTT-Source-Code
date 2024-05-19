@@ -72,6 +72,7 @@ public class UserService {
     /**
      * This method is used to change the password of user.
      */
+    @SuppressWarnings("unchecked")
     public ResponseObject changeUserPassword(changePasswordRequest changePasswordRequest) {
         ResponseObject responseObject = new ResponseObject();
         try {
