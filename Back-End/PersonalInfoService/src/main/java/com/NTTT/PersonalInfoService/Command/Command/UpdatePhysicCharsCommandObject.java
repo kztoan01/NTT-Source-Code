@@ -35,6 +35,8 @@ public class UpdatePhysicCharsCommandObject {
 
     private String goal;
 
+    private String dietType;
+
     private ActivityLevel activityLevel;
 
     private List<WeightTrack> weightTracks;

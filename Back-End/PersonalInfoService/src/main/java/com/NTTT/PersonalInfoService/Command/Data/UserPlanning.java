@@ -22,6 +22,9 @@ public class UserPlanning {
     @Column(name = "userPlanningId")
     private String userPlanningId;
 
+    @Column(name = "userId")
+    private int userId;
+
     @Column(name = "protein")
     private Float protein ;
 
@@ -34,8 +37,8 @@ public class UserPlanning {
     @Column(name = "calories")
     private Float calories ;
 
-    @Column(name = "planeType")
+    @Column(name = "planType")
     @Enumerated(EnumType.ORDINAL)
-    private Enum.PlaneType planeType ;
+    private Enum.PlanType planType ;
 
 }

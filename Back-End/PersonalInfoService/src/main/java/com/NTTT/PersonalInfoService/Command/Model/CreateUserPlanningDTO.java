@@ -24,5 +24,5 @@ public class CreateUserPlanningDTO {
     private Float calories ;
 
     @Enumerated(EnumType.ORDINAL)
-    private Enum.PlaneType planeType ;
+    private Enum.PlanType planType ;
 }

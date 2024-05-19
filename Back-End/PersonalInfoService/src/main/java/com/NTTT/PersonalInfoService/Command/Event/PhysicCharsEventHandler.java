@@ -1,10 +1,8 @@
 package com.NTTT.PersonalInfoService.Command.Event;
 
 
-import com.NTTT.PersonalInfoService.Command.Data.PhysicChars;
-import com.NTTT.PersonalInfoService.Command.Data.PhysicCharsRepository;
-import com.NTTT.PersonalInfoService.Command.Data.UserPlanning;
-import com.NTTT.PersonalInfoService.Command.Data.WeightTrack;
+import com.NTTT.PersonalInfoService.Command.Config.Enum;
+import com.NTTT.PersonalInfoService.Command.Data.*;
 import com.NTTT.PersonalInfoService.Command.Service.UserPlanningService;
 import com.google.protobuf.UnknownFieldSet;
 import org.axonframework.eventhandling.EventHandler;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class PhysicCharsEventHandler {
@@ -25,7 +24,11 @@ public class PhysicCharsEventHandler {
     @Autowired
     private UserPlanningService userPlanningService;
 
+    @Autowired
+    UserPlanningRepository userPlanningRepository;
+
     private UserPlanning calculateUserPlanning(PhysicChars physicChars) {
+        logger.info(physicChars.getDietType());
         float baseCalories;
         float neededCalories;
         float caloriesBaseOnActivityLevel;
@@ -103,20 +106,31 @@ public class PhysicCharsEventHandler {
             }
             default -> throw new IllegalArgumentException("Invalid diet type: " + dietType);
         }
-    
-        // Calculate neededProtein, neededCarbs, and neededFat
+
         neededProtein = (neededCalories * proteinRatio) / 4.1f;
         neededCarbs = (neededCalories * carbRatio) / 3.75f;
         neededFat = (neededCalories * fatRatio) / 8.8f;
+
+        Enum.PlanType planeType;
+        planeType = switch (activityLevel) {
+            case "SEDENTARY" -> Enum.PlanType.SEDENTARY;
+            case "LIGHT" -> Enum.PlanType.LIGHT;
+            case "MODERATE" -> Enum.PlanType.MODERATE ;
+            case "ACTIVE" -> Enum.PlanType.ACTIVE;
+            case "VERY" -> Enum.PlanType.VERY;
+            default -> throw new IllegalArgumentException("Invalid activityLevel: " + activityLevel);
+        };
     
         // Create and return UserPlanning object
         UserPlanning userPlanning = new UserPlanning();
         userPlanning.setCalories(neededCalories);
         userPlanning.setCarbs(neededCarbs);
+        userPlanning.setProtein(neededProtein);
         userPlanning.setFat(neededFat);
-        userPlanning.setPlaneType(physicChars.getActivityLevel());
-        userPlanning.setNeededFat(neededFat);
-    
+        userPlanning.setPlanType(planeType);
+        userPlanning.setFat(neededFat);
+        userPlanning.setUserPlanningId(UUID.randomUUID().toString());
+        userPlanning.setUserId(physicChars.getId());
         return userPlanning;
     }
     
@@ -133,10 +147,10 @@ public class PhysicCharsEventHandler {
         BeanUtils.copyProperties(event,physicChars);
         PhysicChars savedPhysicChars = physicCharsRepository.save(physicChars);
         event.getWeightTracks().forEach(weightTrack -> weightTrack.setPhysicChars(savedPhysicChars));
-//        if(savedPhysicChars.getId()!=null)
-//        {
-//          userPlanningService.createUserPlanning()
-//        }
+        if(savedPhysicChars.getId()!=null)
+        {
+          userPlanningRepository.save(calculateUserPlanning(savedPhysicChars));
+        }
     }
 
 

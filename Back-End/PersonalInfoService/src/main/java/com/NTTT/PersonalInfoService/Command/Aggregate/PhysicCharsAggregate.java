@@ -50,6 +50,8 @@ public class PhysicCharsAggregate {
 
     private String goal;
 
+    private String dietType;
+
     private ActivityLevel activityLevel;
 
     private List<WeightTrack> weightTracks;
@@ -106,7 +108,7 @@ public class PhysicCharsAggregate {
         this.sex = event.getSex();
         this.height = event.getHeight();
         this.userId = event.getUserId();
-
+        this.dietType = event.getDietType();
     }
 
     @EventSourcingHandler
@@ -121,6 +123,7 @@ public class PhysicCharsAggregate {
         this.sex = event.getSex();
         this.height = event.getHeight();
         this.userId = event.getUserId();
+        this.dietType = event.getDietType();
     }
 
     @EventSourcingHandler

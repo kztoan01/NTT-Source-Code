@@ -23,6 +23,6 @@ public class CreateUserPlanningCommandObject {
 
     private Float calories ;
 
-    private Enum.PlaneType planeType ;
+    private Enum.PlanType planType ;
 
 }

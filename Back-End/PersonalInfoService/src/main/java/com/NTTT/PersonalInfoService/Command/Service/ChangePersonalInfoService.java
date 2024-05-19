@@ -25,7 +25,7 @@ public class ChangePersonalInfoService {
     public ResponseObject changePersonalInfo(ChangePersonalInfoRequestDTO changePersonalInfoRequestDTO)
     {
         String physicsCharId = UUID.randomUUID().toString();
-        CreatePhysicCharsCommandObject createPhysicCharsCommandObject = new CreatePhysicCharsCommandObject(changePersonalInfoRequestDTO.getUserId(), physicsCharId , changePersonalInfoRequestDTO.getAge(),changePersonalInfoRequestDTO.getSex(),changePersonalInfoRequestDTO.getHeight(),changePersonalInfoRequestDTO.getWeightGoal(),changePersonalInfoRequestDTO.getGoal(),changePersonalInfoRequestDTO.getActivityLevel(),changePersonalInfoRequestDTO.getWeightTracks());
+        CreatePhysicCharsCommandObject createPhysicCharsCommandObject = new CreatePhysicCharsCommandObject(changePersonalInfoRequestDTO.getUserId(), physicsCharId , changePersonalInfoRequestDTO.getAge(),changePersonalInfoRequestDTO.getSex(),changePersonalInfoRequestDTO.getHeight(),changePersonalInfoRequestDTO.getWeightGoal(),changePersonalInfoRequestDTO.getGoal(),changePersonalInfoRequestDTO.getDietType(),changePersonalInfoRequestDTO.getActivityLevel(),changePersonalInfoRequestDTO.getWeightTracks());
         commandGateway.sendAndWait(createPhysicCharsCommandObject);
         ResponseObject responseObject = new ResponseObject();
         responseObject.setChangeSuccessfully(true);

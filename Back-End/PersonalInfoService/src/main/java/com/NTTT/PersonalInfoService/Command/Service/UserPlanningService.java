@@ -31,7 +31,7 @@ public class UserPlanningService {
     {
 
         String userPlanningId = UUID.randomUUID().toString();
-        CreateUserPlanningCommandObject createUserPlanningCommandObject = new CreateUserPlanningCommandObject(userPlanningId, createUserPlanningDTO.getProtein(), createUserPlanningDTO.getCarbs(), createUserPlanningDTO.getFat(), createUserPlanningDTO.getCalories(), createUserPlanningDTO.getPlaneType());
+        CreateUserPlanningCommandObject createUserPlanningCommandObject = new CreateUserPlanningCommandObject(userPlanningId, createUserPlanningDTO.getProtein(), createUserPlanningDTO.getCarbs(), createUserPlanningDTO.getFat(), createUserPlanningDTO.getCalories(), createUserPlanningDTO.getPlanType());
         commandGateway.sendAndWait(createUserPlanningCommandObject);
         ResponseObject responseObject = new ResponseObject();
         responseObject.setChangeSuccessfully(true);
