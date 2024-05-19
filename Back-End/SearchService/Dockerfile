@@ -15,10 +15,10 @@
 #--------------------------------------------------------------------------
 FROM --platform=$BUILDPLATFORM maven:3.8.5-eclipse-temurin-17 AS builder
 WORKDIR /workdir/server
-COPY ./pom.xml /workdir/server/pom.xml
+COPY ./SearchService/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
     
-COPY ./src /workdir/server/src
+COPY ./SearchService/src /workdir/server/src
 RUN mvn -Pprod clean package -DskipTests
     
 FROM builder AS dev-envs
