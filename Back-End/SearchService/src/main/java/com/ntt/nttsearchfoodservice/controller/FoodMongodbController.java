@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-    @RequestMapping(value = "/api/food/mongo")
+    @RequestMapping(value = "/mongo")
 public class FoodMongodbController {
     @Autowired
     private FoodMongodbService foodMongodbService;

@@ -84,7 +84,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         else if (userRoles.contains("USER")) {
                             logger.info("test User");
                              logger.info(requestPath);
-                            if (requestPath.contains("/auth/") || requestPath.contains("/user/") || requestPath.contains("/personalInfo/")) {
+                            if (requestPath.contains("/auth/") || requestPath.contains("/user/") || requestPath.contains("/food/") || requestPath.contains("/recipe/")  || requestPath.contains("/excel/")  || requestPath.contains("/fakedata/")  || requestPath.contains("/elastic/")  || requestPath.contains("/personalInfo/")) {
                                 return chain.filter(exchange);
                             } else {
                                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/food/elastic")
+@RequestMapping("/elastic")
 public class FoodElasticController {
     @Autowired
     private FoodElasticService foodElasticService;

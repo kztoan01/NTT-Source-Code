@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @RestController
-@RequestMapping("/api/food/excel")
+@RequestMapping("/excel")
 public class ExcelController {
 
     @Autowired

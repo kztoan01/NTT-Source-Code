@@ -279,6 +279,12 @@ services:
     restart: always
     ports:
      - "27017:27017"
+    volumes:
+      # seeding scripts
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      # named volumes
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
     networks:
       - NTTNetwork
 
@@ -412,6 +418,10 @@ volumes:
   esdata03:
     driver: local
   kibanadata:
+    driver: local
+  mongodb:
+    driver: local
+  mongoconfig:
     driver: local
 
 networks:
