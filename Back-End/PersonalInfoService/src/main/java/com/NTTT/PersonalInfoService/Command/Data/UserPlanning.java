@@ -23,7 +23,7 @@ public class UserPlanning {
     private String userPlanningId;
 
     @Column(name = "userId")
-    private int userId;
+    private String userId;
 
     @Column(name = "protein")
     private Float protein ;
@@ -33,6 +33,9 @@ public class UserPlanning {
 
     @Column(name = "fat")
     private Float fat ;
+
+    @Column(name = "dietType")
+    private String dietType ;
 
     @Column(name = "calories")
     private Float calories ;

@@ -51,7 +51,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
                 try {
                     String email = jwtUtil.extractEmail(authHeader);
-                    ResponseObject responseObject =  template.getForObject("http://user-service:8080/users/getByEmail/" + email, ResponseObject.class);
+                    ResponseObject responseObject =  template.getForObject("http://localhost:8080/users/getByEmail/" + email, ResponseObject.class);
+
+                    //ResponseObject responseObject =  template.getForObject("http://user-service:8080/users/getByEmail/" + email, ResponseObject.class);
                     if(responseObject.getStatusCode() == 200)
                     {
                         logger.info("Test:12");

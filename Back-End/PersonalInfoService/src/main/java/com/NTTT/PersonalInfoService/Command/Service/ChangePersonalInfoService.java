@@ -19,6 +19,9 @@ public class ChangePersonalInfoService {
     @Autowired
     CommandGateway commandGateway;
 
+    @Autowired
+    UserPlanningService planningService;
+
     Logger logger
             = LoggerFactory.getLogger(ChangePersonalInfoRequestDTO.class);
 
@@ -27,6 +30,7 @@ public class ChangePersonalInfoService {
         String physicsCharId = UUID.randomUUID().toString();
         CreatePhysicCharsCommandObject createPhysicCharsCommandObject = new CreatePhysicCharsCommandObject(changePersonalInfoRequestDTO.getUserId(), physicsCharId , changePersonalInfoRequestDTO.getAge(),changePersonalInfoRequestDTO.getSex(),changePersonalInfoRequestDTO.getHeight(),changePersonalInfoRequestDTO.getWeightGoal(),changePersonalInfoRequestDTO.getGoal(),changePersonalInfoRequestDTO.getDietType(),changePersonalInfoRequestDTO.getActivityLevel(),changePersonalInfoRequestDTO.getWeightTracks());
         commandGateway.sendAndWait(createPhysicCharsCommandObject);
+        logger.info(createPhysicCharsCommandObject.getPhysicCharsId());
         ResponseObject responseObject = new ResponseObject();
         responseObject.setChangeSuccessfully(true);
         responseObject.setMessage("Created PersonalInfo");
