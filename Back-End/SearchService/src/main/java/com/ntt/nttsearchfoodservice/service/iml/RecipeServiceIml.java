@@ -58,4 +58,5 @@ public class RecipeServiceIml implements RecipeService {
     public long deleteRecipeByUserId(int userId) {
         return recipeRepo.deleteByUserId(userId);
     }
+
 }
