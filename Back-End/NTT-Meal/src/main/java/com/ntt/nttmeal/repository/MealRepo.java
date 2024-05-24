@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface MealRepo extends MongoRepository<Meal, Integer> {
-    @Query("{'createTime' : { $gte: ?0, $lte: ?1 } }")
-    List<Meal> findByDate(Instant dateFrom, Instant dateTo);
+    @Query("{'createTime' : { $gte: ?0, $lte: ?1 },'userId' : ?2 }")
+    List<Meal> findByDate(Instant dateFrom, Instant dateTo,int userId);
+    List<Meal> findByUserId(Integer userId);
 }

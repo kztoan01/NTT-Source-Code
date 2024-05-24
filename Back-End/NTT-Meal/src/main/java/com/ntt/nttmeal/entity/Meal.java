@@ -32,7 +32,7 @@ public class Meal {
     private String note;
     private Instant createTime;
 
-    public Meal(MealRequest mealRequest,int id) throws ParseException {
+    public Meal(MealRequest mealRequest,int id) {
         this.userId = mealRequest.getUserId();
         this.name = mealRequest.getName();
         this.calories = mealRequest.getCalories();
@@ -42,6 +42,5 @@ public class Meal {
         this.note = mealRequest.getNote();
         this.createTime = LocalDateTime.now().toInstant(ZoneOffset.UTC);
         this.id = id;
-
     }
 }
