@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 
 public class ESUtil {
 
-    public static Supplier<Query> createSupplierAutoSuggest(String partialProductName){
-        Supplier<Query> supplier = ()->Query.of(q->q.match(createAutoSuggestMatchQuery(partialProductName)));
+    public static Supplier<Query> createSupplierAutoSuggest(String partialProductName) {
+        Supplier<Query> supplier = () -> Query.of(q -> q.match(createAutoSuggestMatchQuery(partialProductName)));
         return supplier;
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 public class FakeDataServiceIml implements FakeDataService {
     @Autowired
     FakeData fakeData;
+
     @Override
     public List<Food> getFakeData(int total) {
         return fakeData.getFakeData(total).getBody();

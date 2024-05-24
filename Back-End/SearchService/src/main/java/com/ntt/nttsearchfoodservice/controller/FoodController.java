@@ -4,14 +4,9 @@ import com.ntt.nttsearchfoodservice.dto.Food;
 import com.ntt.nttsearchfoodservice.dto.ListPaging;
 import com.ntt.nttsearchfoodservice.service.ElasticService;
 import com.ntt.nttsearchfoodservice.service.FilesStorageService;
-import com.ntt.nttsearchfoodservice.service.FoodElasticService;
 import com.ntt.nttsearchfoodservice.service.FoodMongodbService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +34,7 @@ public class FoodController {
         }
         return ResponseEntity.ok(listName);
     }
+
     @GetMapping("/search/{searchValue}")
     public ResponseEntity<ListPaging<Food>> searchFood(@PathVariable String searchValue) throws IOException {
         ListPaging<Food> foodList = new ListPaging<>();
@@ -62,7 +58,7 @@ public class FoodController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<String> excel(@RequestParam("file") MultipartFile file ) {
+    public ResponseEntity<String> excel(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
             storageService.save(file);

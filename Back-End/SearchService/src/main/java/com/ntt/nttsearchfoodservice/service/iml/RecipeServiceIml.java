@@ -19,24 +19,20 @@ public class RecipeServiceIml implements RecipeService {
     private SequenceGeneratorService sequenceGeneratorService;
 
 
-
     @Override
-    public boolean addRecipe(Recipe recipe) {
+    public void addRecipe(Recipe recipe) {
         recipe.setId(sequenceGeneratorService.getSequenceNumber(Recipe.SEQUENCE_NAME));
         recipeRepo.save(recipe);
-        return true;
     }
 
     @Override
-    public boolean deleteRecipe(Recipe recipe) {
+    public void deleteRecipe(Recipe recipe) {
         recipeRepo.delete(recipe);
-        return false;
     }
 
     @Override
-    public boolean updateRecipe(Recipe recipe) {
+    public void updateRecipe(Recipe recipe) {
         recipeRepo.save(recipe);
-        return false;
     }
 
     @Override

@@ -18,20 +18,24 @@ public class RecipeController {
     public ResponseEntity<List<Recipe>> getAllRecipes() {
         return ResponseEntity.ok(recipeService.getRecipes());
     }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<Recipe> getRecipe(@PathVariable int id) {
         return ResponseEntity.ok(recipeService.getRecipe(id));
     }
+
     @PostMapping
     public ResponseEntity<String> createRecipe(@RequestBody Recipe recipe) {
         recipeService.addRecipe(recipe);
         return ResponseEntity.ok("Successfully created recipe");
     }
+
     @DeleteMapping
     public ResponseEntity<String> deleteRecipe(@RequestBody Recipe recipe) {
         recipeService.deleteRecipe(recipe);
         return ResponseEntity.ok("Successfully deleted recipe");
     }
+
     @PutMapping
     public ResponseEntity<String> updateRecipe(@RequestBody Recipe recipe) {
         recipeService.updateRecipe(recipe);
@@ -46,7 +50,7 @@ public class RecipeController {
     @DeleteMapping("/userid/{id}")
     public ResponseEntity<String> deleteRecipeByUserId(@PathVariable int id) {
         long n = recipeService.deleteRecipeByUserId(id);
-        return ResponseEntity.ok("Successfully deleted "+n+" recipe");
+        return ResponseEntity.ok("Successfully deleted " + n + " recipe");
     }
 
 }

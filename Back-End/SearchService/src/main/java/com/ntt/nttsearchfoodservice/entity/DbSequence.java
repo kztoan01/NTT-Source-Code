@@ -13,6 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class DbSequence {
     @Id
-    private String  id;
+    private String id;
     private int seq;
 }

@@ -29,16 +29,17 @@ public class FoodMongodbServiceIml implements FoodMongodbService {
 
     @Override
     public List<Food> getAllFood() {
-        List<FoodMongodbEntity> foodMongodbEntityList= foodMongodbRepo.findAll();
+        List<FoodMongodbEntity> foodMongodbEntityList = foodMongodbRepo.findAll();
         foodMongodbEntityList.sort(Comparator.comparing(FoodMongodbEntity::getName));
-        return modelMapper.map(foodMongodbEntityList,new TypeToken<List<Food>>(){}.getType());
+        return modelMapper.map(foodMongodbEntityList, new TypeToken<List<Food>>() {
+        }.getType());
     }
 
     @Override
     public List<Food> getListFood(List<Food> foodList) {
         List<Food> result = new ArrayList<>();
         for (Food foods : foodList) {
-            Food food = modelMapper.map(foodMongodbRepo.findById(foods.getId()),Food.class);
+            Food food = modelMapper.map(foodMongodbRepo.findById(foods.getId()), Food.class);
             result.add(food);
         }
         result.sort(Comparator.comparing(Food::getName));
@@ -52,7 +53,7 @@ public class FoodMongodbServiceIml implements FoodMongodbService {
 
     @Override
     public Food getFood(int id) {
-        return modelMapper.map(foodMongodbRepo.findById(id),Food.class);
+        return modelMapper.map(foodMongodbRepo.findById(id), Food.class);
     }
 
     @Override
@@ -73,9 +74,10 @@ public class FoodMongodbServiceIml implements FoodMongodbService {
 
     @Override
     public void addListFood(List<Food> listFood) {
-        for(Food food : listFood) {
+        for (Food food : listFood) {
             food.setId(sequenceGeneratorService.getSequenceNumber(FoodMongodbEntity.SEQUENCE_NAME));
         }
-        foodMongodbRepo.saveAll(modelMapper.map(listFood,new TypeToken<List<FoodMongodbEntity>>(){}.getType()));
+        foodMongodbRepo.saveAll(modelMapper.map(listFood, new TypeToken<List<FoodMongodbEntity>>() {
+        }.getType()));
     }
 }

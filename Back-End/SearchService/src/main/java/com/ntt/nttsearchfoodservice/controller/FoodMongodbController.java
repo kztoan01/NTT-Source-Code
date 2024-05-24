@@ -2,7 +2,6 @@ package com.ntt.nttsearchfoodservice.controller;
 
 import com.ntt.nttsearchfoodservice.dto.Food;
 import com.ntt.nttsearchfoodservice.service.FoodMongodbService;
-import com.ntt.nttsearchfoodservice.service.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-    @RequestMapping(value = "/mongo")
+@RequestMapping(value = "/mongo")
 public class FoodMongodbController {
     @Autowired
     private FoodMongodbService foodMongodbService;

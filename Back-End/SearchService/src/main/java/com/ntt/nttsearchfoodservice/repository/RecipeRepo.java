@@ -10,6 +10,7 @@ import java.util.List;
 public interface RecipeRepo extends MongoRepository<Recipe, Integer> {
     @Query("{'userId' : ?0}")
     List<Recipe> findByUserId(Integer userId);
-    @Query(delete = true,value = "{'userId': ?0}")
+
+    @Query(delete = true, value = "{'userId': ?0}")
     long deleteByUserId(Integer userId);
 }

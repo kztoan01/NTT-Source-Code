@@ -7,25 +7,18 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
@@ -34,7 +27,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void init() throws IOException {
 
-            Files.createDirectories(root);
+        Files.createDirectories(root);
 
     }
 
@@ -51,7 +44,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
 
     @Override
-    public List<Food> toFoodList(String fileName) throws IOException{
+    public List<Food> toFoodList(String fileName) throws IOException {
         Workbook workbook = new XSSFWorkbook(new FileInputStream(root.resolve(fileName).toFile()));
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rowIterator = sheet.iterator();

@@ -45,7 +45,8 @@ public class FoodElasticServiceIml implements FoodElasticService {
     @Override
     public List<Food> insertAllFood() {
         foodElasticRepo.deleteAll();
-        foodElasticRepo.saveAll(modelMapper.map(foodMongodbService.getAllFood(),new TypeToken<List<FoodElasticEntity>>(){}.getType()));
+        foodElasticRepo.saveAll(modelMapper.map(foodMongodbService.getAllFood(), new TypeToken<List<FoodElasticEntity>>() {
+        }.getType()));
         return foodMongodbService.getAllFood();
     }
 }

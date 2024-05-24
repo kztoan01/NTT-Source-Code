@@ -10,7 +10,7 @@ import java.io.IOException;
 @RestControllerAdvice
 public class ExceptionControl {
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<String> handleIOException(IOException ex){
+    public ResponseEntity<String> handleIOException(IOException ex) {
         System.out.println(ex.getMessage());
         return ResponseEntity.status(404).body("Data not found");
     }
@@ -22,13 +22,13 @@ public class ExceptionControl {
     }
 
     @ExceptionHandler(UnsatisfiedDependencyException.class)
-    public ResponseEntity<String> unsatisfiedDependencyException(UnsatisfiedDependencyException ex){
+    public ResponseEntity<String> unsatisfiedDependencyException(UnsatisfiedDependencyException ex) {
         System.out.println(ex.getMessage());
         return ResponseEntity.status(500).body("Elasticsearch Error");
     }
 
     @ExceptionHandler(UploadException.class)
-    public ResponseEntity<String> uploadException(UploadException ex){
+    public ResponseEntity<String> uploadException(UploadException ex) {
         System.out.println(ex.getMessage());
         return ResponseEntity.status(500).body("Upload Error");
     }
